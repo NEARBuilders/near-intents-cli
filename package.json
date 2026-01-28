@@ -52,7 +52,7 @@
     "test:watch": "vitest",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "pnpm build && changeset publish"
+    "release": "pnpm build && changeset publish --access public"
   },
   "dependencies": {
     "@defuse-protocol/intents-sdk": "^0.43.3",
