@@ -1,0 +1,42 @@
+{
+  "name": "near-intents-cli",
+  "version": "1.0.0",
+  "description": "CLI for NEAR Intents - swap, deposit, and withdraw tokens",
+  "bin": {
+    "near-intents": "./dist/index.cjs"
+  },
+  "scripts": {
+    "build": "tsdown src/index.ts --format cjs --minify",
+    "start": "node dist/index.cjs",
+    "dev": "tsx watch src/index.ts",
+    "cli": "tsx src/index.ts",
+    "test": "NODE_ENV=development vitest run"
+  },
+  "dependencies": {
+    "@defuse-protocol/intents-sdk": "^0.43.3",
+    "@defuse-protocol/internal-utils": "0.15.1",
+    "@defuse-protocol/one-click-sdk-typescript": "^0.1.1-0.2",
+    "@near-js/accounts": "^2.3.3",
+    "@near-js/crypto": "^2.3.3",
+    "@near-js/providers": "^2.3.3",
+    "@near-js/signers": "^2.3.3",
+    "@scure/base": "^2.0.0",
+    "borsh": "^2.0.0",
+    "borsher": "^4.0.0",
+    "bs58": "^6.0.0",
+    "dotenv": "^16.4.7",
+    "fuse.js": "^7.1.0",
+    "js-sha256": "^0.11.1",
+    "near-api-js": "^6.1.0",
+    "tweetnacl": "^1.0.3",
+    "viem": "^2.37.8",
+    "zod": "^4.0.14"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "tsdown": "^0.16.8",
+    "tsx": "^4.7.1",
+    "vite-tsconfig-paths": "^6.0.4",
+    "vitest": "^4.0.17"
+  }
+}
