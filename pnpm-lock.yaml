@@ -41,6 +41,9 @@ importers:
       near-api-js:
         specifier: ^6.1.0
         version: 6.5.1(dc1acee1e8cf2bcbbf759f9269b166a5)
+      near-intents-cli:
+        specifier: ^0.1.0
+        version: 0.1.0(92a9dbc230c9dc647485b418dd0c9d42)
       tweetnacl:
         specifier: ^1.0.3
         version: 1.0.3
@@ -2223,6 +2226,11 @@ packages:
       '@near-js/transactions': ^2.0.1
       '@near-js/types': ^2.0.1
       '@near-js/utils': ^2.0.1
+
+  near-intents-cli@0.1.0:
+    resolution: {integrity: sha512-5rSNRl6z85hm3EkXm771Bjn/UQy/GDle37xdwl//634W7kbF/rdHA77YxJYqrC9/n5V+4hSGpTd4XqlVXK5YXA==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
@@ -5675,6 +5683,46 @@ snapshots:
       node-fetch: 2.6.7
     transitivePeerDependencies:
       - encoding
+
+  near-intents-cli@0.1.0(92a9dbc230c9dc647485b418dd0c9d42):
+    dependencies:
+      '@defuse-protocol/intents-sdk': 0.43.3(d02421ee0230378d92c629cbdeade5e1)
+      '@defuse-protocol/internal-utils': 0.15.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
+      '@defuse-protocol/one-click-sdk-typescript': 0.1.15
+      '@scure/base': 2.0.0
+      borsh: 2.0.0
+      borsher: 4.0.0
+      bs58: 6.0.0
+      dotenv: 16.6.1
+      fuse.js: 7.1.0
+      js-sha256: 0.11.1
+      near-api-js: 6.5.1(dc1acee1e8cf2bcbbf759f9269b166a5)
+      tweetnacl: 1.0.3
+      viem: 2.43.5(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
+      zod: 4.3.5
+    transitivePeerDependencies:
+      - '@gql.tada/svelte-support'
+      - '@gql.tada/vue-support'
+      - '@near-js/accounts'
+      - '@near-js/crypto'
+      - '@near-js/keystores'
+      - '@near-js/keystores-browser'
+      - '@near-js/keystores-node'
+      - '@near-js/providers'
+      - '@near-js/signers'
+      - '@near-js/tokens'
+      - '@near-js/transactions'
+      - '@near-js/types'
+      - '@near-js/utils'
+      - bufferutil
+      - debug
+      - encoding
+      - fastestsmallesttextencoderdecoder
+      - google-protobuf
+      - got
+      - supports-color
+      - typescript
+      - utf-8-validate
 
   no-case@3.0.4:
     dependencies:
