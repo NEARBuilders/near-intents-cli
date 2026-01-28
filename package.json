@@ -49,7 +49,10 @@
     "dev": "tsx watch src/cli.ts",
     "cli": "tsx src/cli.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && changeset publish --access public"
   },
   "dependencies": {
     "@defuse-protocol/intents-sdk": "^0.43.3",
@@ -69,6 +72,7 @@
     "zod": "^4.0.14"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.8",
     "@types/node": "^22.14.1",
     "tsdown": "^0.16.8",
     "tsx": "^4.7.1",
