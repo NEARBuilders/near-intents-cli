@@ -15,17 +15,22 @@ export interface StoredConfig {
   privateKey?: string;
 }
 
-const CONFIG_DIR =
-  process.env.NEAR_INTENTS_CONFIG_DIR || path.join(os.homedir(), ".near-intents");
-const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
+function getConfigDir(): string {
+  return process.env.NEAR_INTENTS_CONFIG_DIR || path.join(os.homedir(), ".near-intents");
+}
+
+function getConfigFile(): string {
+  return path.join(getConfigDir(), "config.json");
+}
 
 /**
  * Read the stored config file from ~/.near-intents/config.json
  */
 export function readStoredConfig(): StoredConfig {
   try {
-    if (fs.existsSync(CONFIG_FILE)) {
-      const content = fs.readFileSync(CONFIG_FILE, "utf-8");
+    const configFile = getConfigFile();
+    if (fs.existsSync(configFile)) {
+      const content = fs.readFileSync(configFile, "utf-8");
       return JSON.parse(content) as StoredConfig;
     }
   } catch {
@@ -38,18 +43,21 @@ export function readStoredConfig(): StoredConfig {
  * Write config to ~/.near-intents/config.json
  */
 export function writeStoredConfig(config: StoredConfig): void {
-  if (!fs.existsSync(CONFIG_DIR)) {
-    fs.mkdirSync(CONFIG_DIR, { recursive: true });
+  const configDir = getConfigDir();
+  const configFile = getConfigFile();
+  if (!fs.existsSync(configDir)) {
+    fs.mkdirSync(configDir, { recursive: true });
   }
-  fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2), "utf-8");
+  fs.writeFileSync(configFile, JSON.stringify(config, null, 2), "utf-8");
 }
 
 /**
  * Clear the stored config file
  */
 export function clearStoredConfig(): void {
-  if (fs.existsSync(CONFIG_FILE)) {
-    fs.unlinkSync(CONFIG_FILE);
+  const configFile = getConfigFile();
+  if (fs.existsSync(configFile)) {
+    fs.unlinkSync(configFile);
   }
 }
 
@@ -57,7 +65,7 @@ export function clearStoredConfig(): void {
  * Get the path to the config file
  */
 export function getConfigPath(): string {
-  return CONFIG_FILE;
+  return getConfigFile();
 }
 
 /**
