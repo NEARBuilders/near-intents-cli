@@ -1,5 +1,6 @@
 import { getNearAddressFromKeyPair } from "@/services/near-intents/wallet";
-import { KeyPair, KeyPairString } from "@near-js/crypto";
+import { KeyPair } from "near-api-js";
+import { KeyPairString } from "./types/near";
 
 export interface Config {
   privateKey: KeyPairString;

@@ -1,5 +1,6 @@
+import { KeyPairString } from "@/types/near";
 import { QuoteResponse } from "@defuse-protocol/one-click-sdk-typescript";
-import { KeyPair, KeyPairString } from "@near-js/crypto";
+import { KeyPair } from "near-api-js";
 import { formatUnits, parseUnits } from "viem";
 import { getTokenBalances } from "../balance/balances";
 import { getOneClickQuote, submitOneClickQuote } from "../oneclick/index";
@@ -22,7 +23,9 @@ export async function getSwapQuote({
   amount: string;
 }): Promise<SwapQuoteResultInternal> {
   const supportedTokens = await getSupportedTokens();
-  const fromToken = supportedTokens.find((t) => t.intentsTokenId === fromTokenId);
+  const fromToken = supportedTokens.find(
+    (t) => t.intentsTokenId === fromTokenId
+  );
   const toToken = supportedTokens.find((t) => t.intentsTokenId === toTokenId);
 
   if (!fromToken) {
@@ -34,7 +37,9 @@ export async function getSwapQuote({
   }
 
   const balances = await getTokenBalances({ walletAddress });
-  const fromTokenBalance = balances.find((b) => b.intentsTokenId === fromTokenId);
+  const fromTokenBalance = balances.find(
+    (b) => b.intentsTokenId === fromTokenId
+  );
 
   if (!fromTokenBalance) {
     return error(`Insufficient balance for ${fromToken.symbol}`);
@@ -44,7 +49,9 @@ export async function getSwapQuote({
   const balanceInBaseUnits = BigInt(fromTokenBalance.balance);
 
   if (amountInBaseUnits > balanceInBaseUnits) {
-    return error(`Insufficient balance. Available: ${fromTokenBalance.balanceFormatted} ${fromToken.symbol}`);
+    return error(
+      `Insufficient balance. Available: ${fromTokenBalance.balanceFormatted} ${fromToken.symbol}`
+    );
   }
 
   const quote = await getOneClickQuote({
@@ -55,9 +62,17 @@ export async function getSwapQuote({
     amount: amountInBaseUnits.toString(),
   });
 
-  const amountInFormatted = formatUnits(BigInt(quote.quote.amountIn), fromToken.decimals);
-  const amountOutFormatted = formatUnits(BigInt(quote.quote.amountOut), toToken.decimals);
-  const exchangeRate = (parseFloat(amountOutFormatted) / parseFloat(amountInFormatted)).toFixed(6);
+  const amountInFormatted = formatUnits(
+    BigInt(quote.quote.amountIn),
+    fromToken.decimals
+  );
+  const amountOutFormatted = formatUnits(
+    BigInt(quote.quote.amountOut),
+    toToken.decimals
+  );
+  const exchangeRate = (
+    parseFloat(amountOutFormatted) / parseFloat(amountInFormatted)
+  ).toFixed(6);
 
   return {
     status: "success" as const,
@@ -82,7 +97,11 @@ export async function executeSwapQuote({
   quote: QuoteResponse;
 }): Promise<SwapExecuteResponse> {
   const wallet = KeyPair.fromString(privateKey);
-  const { txHash } = await submitOneClickQuote({ quote, wallet, walletAddress });
+  const { txHash } = await submitOneClickQuote({
+    quote,
+    wallet,
+    walletAddress,
+  });
 
   return {
     status: "success" as const,

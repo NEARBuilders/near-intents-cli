@@ -1,9 +1,10 @@
+import { KeyPairString } from "@/types/near";
 import { authIdentity } from "@defuse-protocol/internal-utils";
 import {
   QuoteRequest,
   QuoteResponse,
 } from "@defuse-protocol/one-click-sdk-typescript";
-import { KeyPair, KeyPairString } from "@near-js/crypto";
+import { KeyPair } from "near-api-js";
 import { formatUnits, parseUnits } from "viem";
 import { batchBalanceOf } from "../balance/batch";
 import { getOneClickQuote, submitOneClickQuote } from "../oneclick/index";

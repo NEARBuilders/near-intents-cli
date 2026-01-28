@@ -1,8 +1,9 @@
+import { KeyPairString } from "@/types/near";
 import {
   IntentsSDK,
   createIntentSignerNearKeyPair,
 } from "@defuse-protocol/intents-sdk";
-import { KeyPair, KeyPairString } from "@near-js/crypto";
+import { KeyPair } from "near-api-js";
 import { getNearWalletFromKeyPair } from "./wallet";
 
 export const getNearIntentsSDK = async ({
@@ -14,7 +15,7 @@ export const getNearIntentsSDK = async ({
   const account = getNearWalletFromKeyPair(keyPair);
 
   return new IntentsSDK({
-    env: 'production',
+    env: "production",
     referral: "near-dca",
     intentSigner: createIntentSignerNearKeyPair({
       signer: keyPair,

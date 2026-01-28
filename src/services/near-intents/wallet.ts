@@ -1,6 +1,4 @@
-import { Account } from "@near-js/accounts";
-import { KeyPair } from "@near-js/crypto";
-import { KeyPairSigner } from "@near-js/signers";
+import { Account, KeyPair, KeyPairSigner } from "near-api-js";
 import { getNearProvider } from "./provider";
 
 export const getNearSignerFromKeyPair = (keyPair: KeyPair) => {

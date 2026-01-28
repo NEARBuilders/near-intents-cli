@@ -247,7 +247,6 @@ pnpm dev
 The CLI relies on several key libraries:
 
 - `@defuse-protocol/intents-sdk` - Core intents protocol implementation
-- `@near-js/*` - NEAR blockchain interaction
 - `near-api-js` - NEAR API client
 - `viem` - Ethereum interaction library
 - `zod` - Schema validation
