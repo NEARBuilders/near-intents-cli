@@ -15,7 +15,8 @@ export interface StoredConfig {
   privateKey?: string;
 }
 
-const CONFIG_DIR = path.join(os.homedir(), ".near-intents");
+const CONFIG_DIR =
+  process.env.NEAR_INTENTS_CONFIG_DIR || path.join(os.homedir(), ".near-intents");
 const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 
 /**

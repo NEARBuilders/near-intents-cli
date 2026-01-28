@@ -47,7 +47,9 @@
     "prepublishOnly": "pnpm build",
     "start": "node dist/cli.cjs",
     "dev": "tsx watch src/cli.ts",
-    "cli": "tsx src/cli.ts"
+    "cli": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@defuse-protocol/intents-sdk": "^0.43.3",

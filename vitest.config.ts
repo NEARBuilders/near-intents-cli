@@ -8,5 +8,7 @@ export default defineConfig({
     environment: "node",
     globals: false,
     reporters: ["verbose"],
+    testTimeout: 30000,
+    setupFiles: ["./tests/setup.ts"],
   },
 });

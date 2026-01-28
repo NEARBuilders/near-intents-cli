@@ -1,0 +1,457 @@
+# NEAR Intents CLI
+
+SDK and CLI for NEAR Intents - cross-chain token swaps, deposits, and withdrawals. Execute intent-based token transfers across multiple blockchains including NEAR, Ethereum, Solana, and more.
+
+## Features
+
+- **Cross-Chain Swaps**: Swap tokens between any supported blockchains with intent-based execution
+- **Deposits**: Generate deposit addresses to fund your wallet from external chains
+- **Withdrawals**: Withdraw tokens from your NEAR Intents wallet to external addresses
+- **Balance Management**: View token balances across all supported chains
+- **Token Discovery**: Search and browse all supported tokens with pricing information
+- **SDK Access**: Programmatic JavaScript/TypeScript API for building applications
+- **NEAR Wallet Integration**: Full support for NEAR account management and key pairs
+
+## Supported Blockchains
+
+- NEAR Protocol
+- Ethereum
+- Solana
+- Stellar (with memo support)
+- And more chains supported by the Defuse Protocol
+
+## Installation
+
+### Prerequisites
+
+- Node.js 18 or higher
+- pnpm (recommended) or npm
+
+### Install the CLI
+
+```bash
+# Clone the repository
+git clone https://github.com/near/near-intents-cli.git
+cd near-intents-cli
+
+# Install dependencies
+pnpm install
+
+# Build the project
+pnpm build
+
+# Run locally
+pnpm start
+```
+
+### Install Globally
+
+```bash
+# After building, link the CLI globally
+cd dist && npm link
+```
+
+### Use via npx
+
+```bash
+npx near-intents-cli tokens --search USDC
+```
+
+## Quick Start
+
+### 1. Generate a NEAR Key Pair
+
+If you don't have a NEAR account, generate a new key pair:
+
+```bash
+near-intents config generate-key
+```
+
+This creates a new ed25519 key pair and saves it to `~/.near-intents/config.json`. The wallet address will be displayed for you to fund.
+
+### 2. Get an API Key (Optional)
+
+For fee-free swaps, get a free API key from [near-intents.org/partners](https://partners.near-intents.org/):
+
+```bash
+near-intents config set api-key YOUR_API_KEY
+```
+
+Without an API key, swaps incur a 0.1% fee.
+
+### 3. Fund Your Wallet
+
+Deposit tokens to start trading:
+
+```bash
+# Get a deposit address for USDC on Ethereum
+near-intents deposit --token USDC --blockchain eth
+```
+
+### 4. Start Trading
+
+```bash
+# Check your balances
+near-intents balances
+
+# List available tokens
+near-intents tokens --search ETH
+
+# Execute a swap
+near-intents swap --from USDC --to NEAR --amount 100
+
+# Preview a swap without executing
+near-intents swap --from USDC --to NEAR --amount 100 --dry-run
+```
+
+## CLI Commands
+
+### tokens
+
+List and search supported tokens.
+
+```bash
+near-intents tokens
+near-intents tokens --search USDC
+near-intents tokens --search ETH
+```
+
+Options:
+
+- `--search <query>` - Filter tokens by search query (symbol, name, or token ID)
+
+Output includes token symbol, blockchain, token ID, decimals, and USD price.
+
+### balances
+
+Show wallet balances across all supported tokens and blockchains.
+
+```bash
+near-intents balances
+```
+
+Requires a configured private key. Displays wallet address and a table of all token balances.
+
+### deposit
+
+Get a deposit address to fund your wallet from external chains.
+
+```bash
+near-intents deposit --token <symbol>
+near-intents deposit --token USDC --blockchain eth
+```
+
+Options:
+
+- `--token <symbol>` - Token symbol (required)
+- `--blockchain <chain>` - Blockchain name (required if token exists on multiple chains)
+
+Output includes the deposit address, chain information, and minimum deposit amount.
+
+### swap
+
+Execute a cross-chain token swap.
+
+```bash
+near-intents swap --from <symbol> --to <symbol> --amount <amount>
+near-intents swap --from USDC --to NEAR --amount 100
+near-intents swap --from ETH --to SOL --amount 1.5 --from-chain eth --to-chain sol
+```
+
+Options:
+
+- `--from <symbol>` - Source token symbol (required)
+- `--from-chain <chain>` - Source blockchain (optional, inferred if unambiguous)
+- `--to <symbol>` - Destination token symbol (required)
+- `--to-chain <chain>` - Destination blockchain (optional, inferred if unambiguous)
+- `--amount <num>` - Amount to swap (required)
+- `--dry-run` - Show quote without executing the swap
+
+### withdraw
+
+Withdraw tokens from your NEAR Intents wallet to an external address.
+
+```bash
+near-intents withdraw --to <address> --amount <amount> --token <symbol>
+near-intents withdraw --to 0x1234567890abcdef --amount 50 --token USDC --blockchain eth
+```
+
+Options:
+
+- `--to <address>` - Destination address (required)
+- `--amount <num>` - Amount to withdraw (required)
+- `--token <symbol>` - Token symbol (required)
+- `--blockchain <chain>` - Blockchain (required if token exists on multiple chains)
+- `--dry-run` - Show quote without executing the withdrawal
+
+### config
+
+Manage CLI configuration settings.
+
+```bash
+# Show current configuration
+near-intents config get
+
+# Set API key
+near-intents config set api-key YOUR_API_KEY
+
+# Set private key
+near-intents config set private-key ed25519:YOUR_PRIVATE_KEY
+
+# Generate a new NEAR key pair
+near-intents config generate-key
+
+# Clear all configuration
+near-intents config clear
+```
+
+The config file is stored at `~/.near-intents/config.json`.
+
+## SDK Usage
+
+Import the SDK into your JavaScript/TypeScript projects:
+
+```typescript
+import {
+  getSupportedTokens,
+  getTokenBalances,
+  getSwapQuote,
+  executeSwapQuote,
+  getWithdrawQuote,
+  executeWithdrawQuote,
+  getDepositAddress,
+  loadConfig,
+  configureOneClickAPI,
+} from "near-intents-cli";
+```
+
+### Configuration
+
+```typescript
+import { loadConfig } from "near-intents-cli";
+
+// Load configuration with private key
+const config = loadConfig();
+// { privateKey: "ed25519:...", walletAddress: "..." }
+
+// Configure the OneClick API with custom settings
+configureOneClickAPI({
+  baseUrl: "https://1click.chaindefuser.com",
+  token: "your-api-key",
+});
+```
+
+### Token Operations
+
+```typescript
+import { getSupportedTokens, searchTokens, getToken } from "near-intents-cli";
+
+// Get all supported tokens
+const tokens = await getSupportedTokens();
+// [{ symbol: "NEAR", blockchain: "near", decimals: 24, ... }, ...]
+
+// Search for tokens
+const results = await searchTokens("USDC");
+// [{ symbol: "USDC", blockchain: "eth", ... }, ...]
+
+// Get a specific token
+const token = await getToken("USDC");
+// { symbol: "USDC", blockchain: "eth", decimals: 6, ... }
+```
+
+### Balance Operations
+
+```typescript
+import { getTokenBalances, loadConfig } from "near-intents-cli";
+
+const config = loadConfig();
+const balances = await getTokenBalances({
+  walletAddress: config.walletAddress,
+});
+// [{ symbol: "NEAR", blockchain: "near", balance: "1000000000000000000000000", ... }, ...]
+```
+
+### Swap Operations
+
+```typescript
+import { getSwapQuote, executeSwapQuote, loadConfig } from "near-intents-cli";
+
+const config = loadConfig();
+
+// Get a swap quote
+const quoteResult = await getSwapQuote({
+  walletAddress: config.walletAddress,
+  fromTokenId: "eth:usdc",
+  toTokenId: "near:near",
+  amount: "100",
+});
+
+if (quoteResult.status === "success") {
+  console.log(`Rate: 1 USDC = ${quoteResult.exchangeRate} NEAR`);
+
+  // Execute the swap
+  const result = await executeSwapQuote({
+    privateKey: config.privateKey,
+    walletAddress: config.walletAddress,
+    quote: quoteResult.quote,
+  });
+
+  console.log(`Transaction: ${result.txHash}`);
+  console.log(`Explorer: ${result.explorerLink}`);
+}
+```
+
+### Withdraw Operations
+
+```typescript
+import {
+  getWithdrawQuote,
+  executeWithdrawQuote,
+  loadConfig,
+} from "near-intents-cli";
+
+const config = loadConfig();
+
+// Get a withdrawal quote
+const quoteResult = await getWithdrawQuote({
+  walletAddress: config.walletAddress,
+  destinationAddress: "0x1234567890abcdef",
+  assetId: "near:near",
+  amount: "50",
+  decimals: 24,
+});
+
+if (quoteResult.status === "success") {
+  console.log(`Fee: ${quoteResult.transferFeeFormatted} NEAR`);
+  console.log(`You receive: ${quoteResult.receivedAmountFormatted} NEAR`);
+
+  // Execute the withdrawal
+  const result = await executeWithdrawQuote({
+    privateKey: config.privateKey,
+    walletAddress: config.walletAddress,
+    quote: quoteResult.quote,
+  });
+
+  console.log(`Transaction: ${result.txHash}`);
+}
+```
+
+### Deposit Operations
+
+```typescript
+import { getDepositAddress, loadConfig } from "near-intents-cli";
+
+const config = loadConfig();
+
+// Get a deposit address
+const result = await getDepositAddress({
+  authIdentifier: config.walletAddress,
+  authMethod: "near",
+  assetId: "eth:usdc",
+});
+
+console.log(`Deposit Address: ${result.address}`);
+console.log(`Chain: ${result.chain}`);
+```
+
+## Configuration
+
+### Config File
+
+The CLI stores configuration in `~/.near-intents/config.json`:
+
+```json
+{
+  "apiKey": "your-api-key",
+  "privateKey": "ed25519:your-private-key"
+}
+```
+
+### Environment Variables
+
+You can also use environment variables:
+
+| Variable           | Description                           |
+| ------------------ | ------------------------------------- |
+| `NEAR_PRIVATE_KEY` | NEAR private key (ed25519:xxx format) |
+| `DEFUSE_JWT_TOKEN` | API key for fee-free swaps            |
+
+### Priority
+
+Config priority: CLI config file > environment variables
+
+## API Key
+
+An API key is optional but recommended:
+
+- **Without API key**: 0.1% fee on all swaps and withdrawals
+- **With API key**: Fee-free swaps (get a free key at [partners.near-intents.org](https://partners.near-intents.org/))
+
+The API key is stored securely in your config file.
+
+## Development
+
+### Setup
+
+```bash
+# Install dependencies
+pnpm install
+
+# Run in watch mode
+pnpm dev
+
+# Run CLI directly
+pnpm cli tokens --search ETH
+
+# Build for production
+pnpm build
+
+# Run tests
+pnpm test
+```
+
+### Project Structure
+
+```
+near-intents-cli/
+├── src/
+│   ├── cli.ts              # CLI entry point and command routing
+│   ├── index.ts            # SDK exports
+│   ├── config.ts           # Configuration management
+│   ├── commands/           # CLI command implementations
+│   │   ├── tokens.ts
+│   │   ├── balances.ts
+│   │   ├── deposit.ts
+│   │   ├── swap.ts
+│   │   ├── withdraw.ts
+│   │   └── config.ts
+│   ├── services/           # Core business logic
+│   │   ├── tokens/         # Token listing and search
+│   │   ├── balance/        # Balance queries
+│   │   ├── swap/           # Swap quotes and execution
+│   │   ├── withdraw/       # Withdrawal quotes and execution
+│   │   ├── deposit/        # Deposit address generation
+│   │   ├── near-intents/   # NEAR SDK integration
+│   │   └── oneclick/       # OneClick API integration
+│   ├── types/              # TypeScript type definitions
+│   └── utils/              # Utility functions
+├── package.json
+├── tsconfig.json
+└── vitest.config.ts
+```
+
+## Dependencies
+
+Key dependencies used by this project:
+
+- **@defuse-protocol/intents-sdk**: Core intents protocol SDK
+- **@defuse-protocol/one-click-sdk-typescript**: One-click swap API
+- **@defuse-protocol/internal-utils**: Internal utilities
+- **near-api-js**: NEAR blockchain interaction
+- **viem**: Ethereum interaction and formatting
+- **borsh/borsher**: Binary serialization
+- **zod**: Schema validation
+
+## License
+
+MIT
