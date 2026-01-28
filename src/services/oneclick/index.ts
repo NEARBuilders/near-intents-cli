@@ -1,3 +1,4 @@
+import { getApiKey } from "@/config";
 import { createTransferMessage } from "@/utils/messages";
 import { convertPublishIntentToLegacyFormat } from "@/utils/parseFailedPublishError";
 import {
@@ -13,11 +14,33 @@ import {
 } from "@defuse-protocol/one-click-sdk-typescript";
 import { base64 } from "@scure/base";
 import { KeyPair, KeyPairSigner } from "near-api-js";
-import { env } from "process";
 import { getNearIntentsSDK } from "../near-intents/sdk";
 
-OpenAPI.BASE = "https://1click.chaindefuser.com";
-OpenAPI.TOKEN = env.DEFUSE_JWT_TOKEN;
+// Lazy initialization flag
+let isConfigured = false;
+
+/**
+ * Configure the OneClick API with custom settings.
+ * Call this before using any OneClick functions if you need custom configuration.
+ * If not called, defaults will be used automatically on first API call.
+ *
+ * API key priority: explicit token param > config file > env var
+ */
+export function configureOneClickAPI(options?: {
+  baseUrl?: string;
+  token?: string;
+}): void {
+  OpenAPI.BASE = options?.baseUrl ?? "https://1click.chaindefuser.com";
+  OpenAPI.TOKEN = options?.token ?? getApiKey();
+  isConfigured = true;
+}
+
+// Ensure API is configured before use (lazy init)
+function ensureConfigured(): void {
+  if (!isConfigured) {
+    configureOneClickAPI();
+  }
+}
 
 export const getOneClickQuote = async ({
   originAsset,
@@ -34,6 +57,7 @@ export const getOneClickQuote = async ({
   fromWalletAddress: string;
   recipientType?: QuoteRequest.recipientType;
 }) => {
+  ensureConfigured();
   const deadline = new Date();
   deadline.setSeconds(deadline.getSeconds() + 60 * 20);
 
@@ -64,6 +88,7 @@ export const submitOneClickQuote = async ({
   wallet: KeyPair;
   walletAddress: string;
 }) => {
+  ensureConfigured();
   try {
     const sdk = await getNearIntentsSDK({ privateKey: wallet.toString() });
     const { nonce, deadline } = await sdk

@@ -1,109 +1,113 @@
-import "dotenv/config";
-import { balancesCommand } from "./commands/balances";
-import { depositCommand } from "./commands/deposit";
-import { swapCommand } from "./commands/swap";
-import { tokensCommand } from "./commands/tokens";
-import { withdrawCommand } from "./commands/withdraw";
-import { loadConfig } from "./config";
-import { parseArgs } from "./utils/token";
+// NEAR Intents SDK
+// Public API exports for programmatic use
 
-const HELP = `
-NEAR Intents CLI
+// ============================================================================
+// Tokens
+// ============================================================================
+export {
+  getSupportedTokens,
+  getToken,
+  getTokenById,
+  searchTokens,
+  searchTokensBySymbol,
+  getTokensByBlockchain,
+} from "./services/tokens/service";
 
-Usage: pnpm cli <command> [options]
+// ============================================================================
+// Balances
+// ============================================================================
+export { getTokenBalances } from "./services/balance/balances";
 
-Commands:
-  tokens                        List all supported tokens
-  balances                      Show your token balances
-  deposit                       Get deposit address for a token
-  swap                          Execute a token swap
-  withdraw                      Withdraw tokens to external address
+// ============================================================================
+// Swap
+// ============================================================================
+export { getSwapQuote, executeSwapQuote } from "./services/swap/service";
 
-Options:
-  tokens:
-    --search <query>            Filter tokens by search query
+// ============================================================================
+// Withdraw
+// ============================================================================
+export {
+  getWithdrawQuote,
+  executeWithdrawQuote,
+} from "./services/withdraw/service";
 
-  deposit:
-    --token <symbol>            Token symbol (required)
-    --blockchain <chain>        Blockchain (required if token exists on multiple chains)
+// ============================================================================
+// Deposit
+// ============================================================================
+export { getDepositAddress } from "./services/deposit/index";
 
-  swap:
-    --from <symbol>             Source token symbol (required)
-    --from-chain <chain>        Source blockchain
-    --to <symbol>               Destination token symbol (required)
-    --to-chain <chain>          Destination blockchain
-    --amount <num>              Amount to swap (required)
-    --dry-run                   Show quote without executing
+// ============================================================================
+// NEAR Utilities
+// ============================================================================
+export { getNearIntentsSDK } from "./services/near-intents/sdk";
+export {
+  getNearWalletFromKeyPair,
+  getNearAddressFromKeyPair,
+  getNearSignerFromKeyPair,
+} from "./services/near-intents/wallet";
 
-  withdraw:
-    --to <address>              Destination address (required)
-    --amount <num>              Amount to withdraw (required)
-    --token <symbol>            Token symbol (required)
-    --blockchain <chain>        Blockchain (required if token exists on multiple chains)
-    --dry-run                   Show quote without executing
+// ============================================================================
+// OneClick API Configuration
+// ============================================================================
+export { configureOneClickAPI } from "./services/oneclick/index";
 
-Environment:
-  NEAR_PRIVATE_KEY              Your NEAR private key (ed25519:xxxx format)
+// ============================================================================
+// Configuration
+// ============================================================================
+export {
+  loadConfig,
+  tryLoadConfig,
+  readStoredConfig,
+  writeStoredConfig,
+  clearStoredConfig,
+  getConfigPath,
+  getApiKey,
+  hasApiKey,
+} from "./config";
+export type { Config, StoredConfig } from "./config";
 
-Examples:
-  pnpm cli tokens
-  pnpm cli tokens --search USDC
-  pnpm cli balances
-  pnpm cli deposit --token USDC --blockchain eth
-  pnpm cli swap --from USDC --to NEAR --amount 100
-  pnpm cli swap --from USDC --to NEAR --amount 100 --dry-run
-  pnpm cli withdraw --to 0x123... --amount 50 --token USDC --blockchain eth
-  pnpm cli withdraw --to 0x123... --amount 50 --token USDC --dry-run
-`;
+// ============================================================================
+// Types
+// ============================================================================
+export type {
+  Token,
+  SearchQuery,
+  TokensListResponse,
+  TokenResponse,
+} from "./services/tokens/schema";
 
-async function main() {
-  const args = process.argv.slice(2);
-  const { command, flags } = parseArgs(args);
+export type {
+  TokenBalance,
+  BalanceResponse,
+} from "./services/balance/schema";
 
-  if (!command || command === "help" || flags.help) {
-    console.log(HELP);
-    return;
-  }
+export type {
+  SwapQuoteRequest,
+  SwapQuoteResponse,
+  SwapExecuteRequest,
+  SwapExecuteResponse,
+  SwapQuoteResultInternal,
+  SwapQuoteSuccessInternal,
+  SwapQuoteErrorInternal,
+} from "./services/swap/schema";
 
-  try {
-    switch (command) {
-      case "tokens":
-        await tokensCommand(flags);
-        break;
+export type {
+  WithdrawQuoteRequest,
+  WithdrawQuoteResponse,
+  WithdrawSubmitRequest,
+  WithdrawSubmitResponse,
+  WithdrawQuoteResultInternal,
+  WithdrawQuoteSuccessInternal,
+  WithdrawQuoteErrorInternal,
+} from "./services/withdraw/schema";
 
-      case "balances": {
-        const config = loadConfig();
-        await balancesCommand(config);
-        break;
-      }
+export type {
+  DepositAddressRequest,
+  DepositAddressResponse,
+} from "./services/deposit/schema";
 
-      case "deposit": {
-        const config = loadConfig();
-        await depositCommand(config, flags);
-        break;
-      }
+export type { KeyPairString } from "./types/near";
 
-      case "swap": {
-        const config = loadConfig();
-        await swapCommand(config, flags);
-        break;
-      }
-
-      case "withdraw": {
-        const config = loadConfig();
-        await withdrawCommand(config, flags);
-        break;
-      }
-
-      default:
-        console.error(`Unknown command: ${command}`);
-        console.log(HELP);
-        process.exit(1);
-    }
-  } catch (error) {
-    console.error(`Error: ${error instanceof Error ? error.message : error}`);
-    process.exit(1);
-  }
-}
-
-main();
+// Re-export useful types from dependencies
+export { AuthMethod } from "@defuse-protocol/internal-utils";
+export type { QuoteResponse } from "@defuse-protocol/one-click-sdk-typescript";

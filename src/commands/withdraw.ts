@@ -1,9 +1,19 @@
-import { Config } from "../config";
+import { Config, hasApiKey } from "../config";
 import {
   executeWithdrawQuote,
   getWithdrawQuote,
 } from "../services/withdraw/service";
 import { resolveToken } from "../utils/token";
+
+function showFeeNotice() {
+  if (!hasApiKey()) {
+    console.log(
+      "\nNo API key configured. Withdrawals incur 0.1% fee.\n" +
+        "Get free key: https://partners.near-intents.org/\n" +
+        "Run: near-intents config set api-key <your-key>\n"
+    );
+  }
+}
 
 export async function withdrawCommand(
   config: Config,
@@ -18,6 +28,8 @@ export async function withdrawCommand(
   if (!toAddress) throw new Error("--to is required");
   if (!amount) throw new Error("--amount is required");
   if (!symbol) throw new Error("--token is required");
+
+  showFeeNotice();
 
   const token = await resolveToken(symbol, blockchain, "--blockchain");
 

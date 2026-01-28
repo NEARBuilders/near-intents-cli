@@ -1,16 +1,53 @@
 {
   "name": "near-intents-cli",
-  "version": "1.0.0",
-  "description": "CLI for NEAR Intents - swap, deposit, and withdraw tokens",
+  "version": "0.1.0",
+  "description": "SDK and CLI for NEAR Intents - cross-chain token swaps, deposits, and withdrawals",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
   "bin": {
-    "near-intents": "./dist/index.cjs"
+    "near-intents": "./dist/cli.cjs"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "near",
+    "intents",
+    "cross-chain",
+    "swap",
+    "defi",
+    "defuse",
+    "blockchain",
+    "crypto",
+    "ethereum",
+    "solana"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
   },
   "scripts": {
-    "build": "tsdown src/index.ts --format cjs --minify",
-    "start": "node dist/index.cjs",
-    "dev": "tsx watch src/index.ts",
-    "cli": "tsx src/index.ts",
-    "test": "NODE_ENV=development vitest run"
+    "build": "tsdown src/index.ts src/cli.ts --format esm,cjs --dts --clean",
+    "prepublishOnly": "pnpm build",
+    "start": "node dist/cli.cjs",
+    "dev": "tsx watch src/cli.ts",
+    "cli": "tsx src/cli.ts"
   },
   "dependencies": {
     "@defuse-protocol/intents-sdk": "^0.43.3",
@@ -32,6 +69,7 @@
     "@types/node": "^22.14.1",
     "tsdown": "^0.16.8",
     "tsx": "^4.7.1",
+    "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^6.0.4",
     "vitest": "^4.0.17"
   }
