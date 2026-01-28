@@ -9,43 +9,48 @@ import { loadConfig } from "./config";
 
 const VERSION = "0.1.0";
 
-const BANNER = `
- _  _ ___   _   ___   ___     _           _
-| \\| | __| /_\\ | _ \\ |_ _|_ _| |_ ___ _ _| |_ ___
-| .\` | _| / _ \\|   /  | || ' |  _/ -_) ' \\  _(_-<
-|_|\\_|___/_/ \\_\\_|_\\ |___|_||_\\__\\___|_||_\\__/__/
-`;
+// ANSI color codes for terminal styling
+const COLORS = {
+  reset: "\x1b[0m",
+  bright: "\x1b[1m",
+  cyan: "\x1b[36m",
+  magenta: "\x1b[35m",
+  blue: "\x1b[34m",
+  green: "\x1b[32m",
+  yellow: "\x1b[33m",
+  white: "\x1b[37m",
+};
 
-const HELP = `${BANNER}
-NEAR Intents CLI v${VERSION}
+const HELP = `
+${COLORS.bright}${COLORS.cyan}Near Intents CLI${COLORS.reset} v${VERSION}
 Cross-chain token swaps via intent-based execution.
 
-API KEY:
-  Get free key: https://partners.near-intents.org/
+${COLORS.yellow}API KEY:${COLORS.reset}
+  Get free key: ${COLORS.green}https://partners.near-intents.org/${COLORS.reset}
   Without key: 0.1% swap fee
   Set: near-intents config set api-key <key>
 
-COMMANDS:
-  tokens      List/search supported tokens
-  balances    Show wallet balances
-  deposit     Get deposit address
-  swap        Execute token swap
-  withdraw    Withdraw to external address
-  config      Manage settings (api-key, private-key)
+${COLORS.bright}${COLORS.cyan}COMMANDS:${COLORS.reset}
+  ${COLORS.green}tokens${COLORS.reset}      List/search supported tokens
+  ${COLORS.green}balances${COLORS.reset}   Show wallet balances
+  ${COLORS.green}deposit${COLORS.reset}    Get deposit address
+  ${COLORS.green}swap${COLORS.reset}       Execute token swap
+  ${COLORS.green}withdraw${COLORS.reset}   Withdraw to external address
+  ${COLORS.green}config${COLORS.reset}     Manage settings (api-key, private-key)
 
-OPTIONS:
-  --help, -h           Show help
-  --version, -v        Show version
+${COLORS.bright}${COLORS.cyan}OPTIONS:${COLORS.reset}
+  ${COLORS.green}--help, -h${COLORS.reset}          Show help
+  ${COLORS.green}--version, -v${COLORS.reset}       Show version
 
-COMMAND OPTIONS:
-  tokens:
+${COLORS.bright}${COLORS.cyan}COMMAND OPTIONS:${COLORS.reset}
+  ${COLORS.green}tokens:${COLORS.reset}
     --search <query>            Filter tokens by search query
 
-  deposit:
+  ${COLORS.green}deposit:${COLORS.reset}
     --token <symbol>            Token symbol (required)
     --blockchain <chain>        Blockchain (required if token exists on multiple chains)
 
-  swap:
+  ${COLORS.green}swap:${COLORS.reset}
     --from <symbol>             Source token symbol (required)
     --from-chain <chain>        Source blockchain
     --to <symbol>               Destination token symbol (required)
@@ -53,21 +58,21 @@ COMMAND OPTIONS:
     --amount <num>              Amount to swap (required)
     --dry-run                   Show quote without executing
 
-  withdraw:
+  ${COLORS.green}withdraw:${COLORS.reset}
     --to <address>              Destination address (required)
     --amount <num>              Amount to withdraw (required)
     --token <symbol>            Token symbol (required)
     --blockchain <chain>        Blockchain (required if token exists on multiple chains)
     --dry-run                   Show quote without executing
 
-  config:
+  ${COLORS.green}config:${COLORS.reset}
     set api-key <key>           Save API key
     set private-key <key>       Save private key
     generate-key                Generate new NEAR key pair
     get                         Show current config
     clear                       Remove config file
 
-EXAMPLES:
+${COLORS.bright}${COLORS.cyan}EXAMPLES:${COLORS.reset}
   near-intents config generate-key
   near-intents config set api-key YOUR_KEY
   near-intents tokens --search USDC
@@ -77,7 +82,7 @@ EXAMPLES:
   near-intents swap --from USDC --to NEAR --amount 100 --dry-run
   near-intents withdraw --to 0x123... --amount 50 --token USDC --blockchain eth
 
-EXIT CODES:
+${COLORS.bright}${COLORS.cyan}EXIT CODES:${COLORS.reset}
   0  Success
   1  Error (invalid args, API error, etc.)
 `;
@@ -127,7 +132,12 @@ async function main() {
   }
 
   // Handle --help / -h or no command
-  if (!command || command === "help" || flags.help === "true" || flags.h === "true") {
+  if (
+    !command ||
+    command === "help" ||
+    flags.help === "true" ||
+    flags.h === "true"
+  ) {
     console.log(HELP);
     return;
   }
