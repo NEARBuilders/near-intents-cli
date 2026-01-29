@@ -115,11 +115,9 @@ export const submitOneClickQuote = async ({
 
 		const signature = await signer.signNep413Message(
 			walletMessage.NEP413.message,
-			{
-				recipient: walletMessage.NEP413.recipient,
-				nonce: walletMessage.NEP413.nonce,
-				message: walletMessage.NEP413.message,
-			},
+			walletAddress,
+			walletMessage.NEP413.recipient,
+			walletMessage.NEP413.nonce,
 		);
 
 		const publishResult = await solverRelay
