@@ -55,8 +55,8 @@
     "release": "pnpm build && changeset publish --access public"
   },
   "dependencies": {
-    "@defuse-protocol/intents-sdk": "^0.43.3",
-    "@defuse-protocol/internal-utils": "0.15.1",
+    "@defuse-protocol/intents-sdk": "^0.46.1",
+    "@defuse-protocol/internal-utils": "0.24.1",
     "@defuse-protocol/one-click-sdk-typescript": "^0.1.1-0.2",
     "@scure/base": "^2.0.0",
     "borsh": "^2.0.0",
@@ -65,7 +65,7 @@
     "dotenv": "^16.4.7",
     "fuse.js": "^7.1.0",
     "js-sha256": "^0.11.1",
-    "near-api-js": "^6.1.0",
+    "near-api-js": "^7.0.4",
     "tweetnacl": "^1.0.3",
     "viem": "^2.37.8",
     "zod": "^4.0.14"

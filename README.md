@@ -22,42 +22,55 @@ SDK and CLI for NEAR Intents - cross-chain token swaps, deposits, and withdrawal
 
 ## Installation
 
-### Prerequisites
+You can use the CLI directly without installing it, or install it globally.
 
-- Node.js 18 or higher
-- pnpm (recommended) or npm
-
-### Install the CLI
+### Quick Start (No Installation Required)
 
 ```bash
-# Clone the repository
-git clone https://github.com/near/near-intents-cli.git
-cd near-intents-cli
+# Using pnpm dlx
+pnpm dlx near-intents-cli tokens --search USDC
 
-# Install dependencies
-pnpm install
+# Using bunx
+bunx near-intents-cli tokens --search USDC
 
-# Build the project
-pnpm build
-
-# Run locally
-pnpm start
+# Using npx
+npx near-intents-cli tokens --search USDC
 ```
 
 ### Install Globally
 
 ```bash
-# After building, link the CLI globally
-cd dist && npm link
+# Using pnpm
+pnpm add -g near-intents-cli
+
+# Using npm
+npm install -g near-intents-cli
+
+# Using bun
+bun add -g near-intents-cli
 ```
 
-### Use via npx
+Then run commands directly:
 
 ```bash
-npx near-intents-cli tokens --search USDC
+near-intents tokens --search USDC
+near-intents balances
 ```
 
 ## Quick Start
+
+All examples below use `near-intents` assuming you've installed the CLI globally. If you haven't installed it, prefix commands with your package runner:
+
+```bash
+# Using pnpm dlx
+pnpm dlx near-intents-cli <command>
+
+# Using bunx
+bunx near-intents-cli <command>
+
+# Using npx
+npx near-intents-cli <command>
+```
 
 ### 1. Generate a NEAR Key Pair
 
@@ -451,7 +464,3 @@ Key dependencies used by this project:
 - **viem**: Ethereum interaction and formatting
 - **borsh/borsher**: Binary serialization
 - **zod**: Schema validation
-
-## License
-
-MIT

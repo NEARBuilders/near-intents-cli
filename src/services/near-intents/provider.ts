@@ -1,7 +1,7 @@
-import { providers } from "near-api-js";
+import { JsonRpcProvider } from "near-api-js";
 
 export const getNearProvider = () => {
-  return new providers.JsonRpcProvider({
+  return new JsonRpcProvider({
     url: "https://rpc.mainnet.fastnear.com",
   });
 };
