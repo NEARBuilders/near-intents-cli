@@ -11,14 +11,14 @@ const VERSION = "0.1.0";
 
 // ANSI color codes for terminal styling
 const COLORS = {
-  reset: "\x1b[0m",
-  bright: "\x1b[1m",
-  cyan: "\x1b[36m",
-  magenta: "\x1b[35m",
-  blue: "\x1b[34m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  white: "\x1b[37m",
+	reset: "\x1b[0m",
+	bright: "\x1b[1m",
+	cyan: "\x1b[36m",
+	magenta: "\x1b[35m",
+	blue: "\x1b[34m",
+	green: "\x1b[32m",
+	yellow: "\x1b[33m",
+	white: "\x1b[37m",
 };
 
 const HELP = `
@@ -88,111 +88,111 @@ ${COLORS.bright}${COLORS.cyan}EXIT CODES:${COLORS.reset}
 `;
 
 function parseArgs(args: string[]): {
-  command: string;
-  flags: Record<string, string>;
-  positional: string[];
+	command: string;
+	flags: Record<string, string>;
+	positional: string[];
 } {
-  const flags: Record<string, string> = {};
-  const positional: string[] = [];
-  let command = "";
+	const flags: Record<string, string> = {};
+	const positional: string[] = [];
+	let command = "";
 
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-    if (arg.startsWith("--")) {
-      const key = arg.slice(2);
-      const value = args[i + 1];
-      if (value && !value.startsWith("-")) {
-        flags[key] = value;
-        i++;
-      } else {
-        flags[key] = "true";
-      }
-    } else if (arg.startsWith("-")) {
-      // Short flags like -h, -v
-      const key = arg.slice(1);
-      flags[key] = "true";
-    } else if (!command) {
-      command = arg;
-    } else {
-      positional.push(arg);
-    }
-  }
+	for (let i = 0; i < args.length; i++) {
+		const arg = args[i];
+		if (arg.startsWith("--")) {
+			const key = arg.slice(2);
+			const value = args[i + 1];
+			if (value && !value.startsWith("-")) {
+				flags[key] = value;
+				i++;
+			} else {
+				flags[key] = "true";
+			}
+		} else if (arg.startsWith("-")) {
+			// Short flags like -h, -v
+			const key = arg.slice(1);
+			flags[key] = "true";
+		} else if (!command) {
+			command = arg;
+		} else {
+			positional.push(arg);
+		}
+	}
 
-  return { command, flags, positional };
+	return { command, flags, positional };
 }
 
 async function main() {
-  const args = process.argv.slice(2);
-  const { command, flags, positional } = parseArgs(args);
+	const args = process.argv.slice(2);
+	const { command, flags, positional } = parseArgs(args);
 
-  // Handle --version / -v
-  if (flags.version === "true" || flags.v === "true") {
-    console.log(`near-intents v${VERSION}`);
-    return;
-  }
+	// Handle --version / -v
+	if (flags.version === "true" || flags.v === "true") {
+		console.log(`near-intents v${VERSION}`);
+		return;
+	}
 
-  // Handle --help / -h or no command
-  if (
-    !command ||
-    command === "help" ||
-    flags.help === "true" ||
-    flags.h === "true"
-  ) {
-    console.log(HELP);
-    return;
-  }
+	// Handle --help / -h or no command
+	if (
+		!command ||
+		command === "help" ||
+		flags.help === "true" ||
+		flags.h === "true"
+	) {
+		console.log(HELP);
+		return;
+	}
 
-  try {
-    switch (command) {
-      case "tokens":
-        await tokensCommand(flags);
-        break;
+	try {
+		switch (command) {
+			case "tokens":
+				await tokensCommand(flags);
+				break;
 
-      case "balances": {
-        const config = loadConfig();
-        await balancesCommand(config);
-        break;
-      }
+			case "balances": {
+				const config = loadConfig();
+				await balancesCommand(config);
+				break;
+			}
 
-      case "deposit": {
-        const config = loadConfig();
-        await depositCommand(config, flags);
-        break;
-      }
+			case "deposit": {
+				const config = loadConfig();
+				await depositCommand(config, flags);
+				break;
+			}
 
-      case "swap": {
-        const config = loadConfig();
-        await swapCommand(config, flags);
-        break;
-      }
+			case "swap": {
+				const config = loadConfig();
+				await swapCommand(config, flags);
+				break;
+			}
 
-      case "withdraw": {
-        const config = loadConfig();
-        await withdrawCommand(config, flags);
-        break;
-      }
+			case "withdraw": {
+				const config = loadConfig();
+				await withdrawCommand(config, flags);
+				break;
+			}
 
-      case "config": {
-        // Parse config subcommand: config set api-key <value>
-        // positional[0] = subcommand (set/get/clear)
-        // positional[1] = key (api-key/private-key)
-        // positional[2] = value
-        flags._subcommand = positional[0];
-        flags._key = positional[1];
-        flags._value = positional[2];
-        await configCommand(flags);
-        break;
-      }
+			case "config": {
+				// Parse config subcommand: config set api-key <value>
+				// positional[0] = subcommand (set/get/clear)
+				// positional[1] = key (api-key/private-key)
+				// positional[2] = value
+				flags._subcommand = positional[0];
+				flags._key = positional[1];
+				flags._value = positional[2];
+				await configCommand(flags);
+				break;
+			}
 
-      default:
-        console.error(`Unknown command: ${command}`);
-        console.log(HELP);
-        process.exit(1);
-    }
-  } catch (error) {
-    console.error(`Error: ${error instanceof Error ? error.message : error}`);
-    process.exit(1);
-  }
+			default:
+				console.error(`Unknown command: ${command}`);
+				console.log(HELP);
+				process.exit(1);
+		}
+	} catch (error) {
+		console.error(`Error: ${error instanceof Error ? error.message : error}`);
+		process.exit(1);
+	}
 }
 
 main();

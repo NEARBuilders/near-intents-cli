@@ -1,23 +1,23 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "strict": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "noImplicitAny": false,
-    "types": ["node"],
-    "jsx": "preserve",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "jsxImportSource": "hono/jsx",
-    "declaration": false,
-    "declarationMap": false,
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "baseUrl": "."
-  },
-  "include": ["src/**/*", "tests/**/*"]
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"strict": true,
+		"skipLibCheck": true,
+		"strictNullChecks": true,
+		"noImplicitAny": false,
+		"types": ["node"],
+		"jsx": "preserve",
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"jsxImportSource": "hono/jsx",
+		"declaration": false,
+		"declarationMap": false,
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"baseUrl": "."
+	},
+	"include": ["src/**/*", "tests/**/*"]
 }
