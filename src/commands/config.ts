@@ -1,9 +1,9 @@
-import { KeyPair } from "near-api-js";
+import { KeyPair, KeyPairString } from "near-api-js";
 import {
-  readStoredConfig,
-  writeStoredConfig,
   clearStoredConfig,
   getConfigPath,
+  readStoredConfig,
+  writeStoredConfig,
 } from "../config";
 import { getNearAddressFromKeyPair } from "../services/near-intents/wallet";
 
@@ -37,7 +37,9 @@ Config file: ${getConfigPath()}`);
 
 function configSet(key: string | undefined, value: string | undefined) {
   if (!key) {
-    console.error("Error: Missing key. Usage: config set <api-key|private-key> <value>");
+    console.error(
+      "Error: Missing key. Usage: config set <api-key|private-key> <value>"
+    );
     process.exit(1);
   }
   if (!value) {
@@ -88,7 +90,7 @@ function configGet() {
 
   if (config.privateKey) {
     const prefix = config.privateKey.split(":")[0];
-    const keyPair = KeyPair.fromString(config.privateKey);
+    const keyPair = KeyPair.fromString(config.privateKey as KeyPairString);
     const address = getNearAddressFromKeyPair(keyPair);
     console.log(`Private key: ${prefix}:****`);
     console.log(`Wallet address: ${address}`);

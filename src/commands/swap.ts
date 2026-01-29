@@ -71,7 +71,11 @@ export async function swapCommand(
     quote: quoteResult.quote,
   });
 
-  console.log(`\nSwap completed!`);
-  console.log(`Transaction: ${result.txHash}`);
-  console.log(`Explorer: ${result.explorerLink}`);
+  console.log(`\nSwap submitted!`);
+  if (result.status === "success") {
+    console.log(`Transaction: ${result.txHash}`);
+    console.log(`Explorer: ${result.explorerLink}`);
+  } else {
+    console.log(`Error: ${result.message}`);
+  }
 }
