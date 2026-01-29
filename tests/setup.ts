@@ -1,10 +1,13 @@
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import { beforeAll, afterAll } from "vitest";
+import { afterAll, beforeAll } from "vitest";
 
 // Create temp config directory for test isolation
-const TEST_CONFIG_DIR = path.join(os.tmpdir(), `near-intents-test-${process.pid}`);
+const TEST_CONFIG_DIR = path.join(
+  os.tmpdir(),
+  `near-intents-test-${process.pid}`
+);
 
 beforeAll(() => {
   process.env.NEAR_INTENTS_CONFIG_DIR = TEST_CONFIG_DIR;

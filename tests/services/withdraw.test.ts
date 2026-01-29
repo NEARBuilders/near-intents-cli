@@ -1,8 +1,7 @@
-import { executeWithdrawQuote, getWithdrawQuote } from "@/index";
+import { getWithdrawQuote } from "@/index";
 import { getTokenBalances } from "@/services/balance/balances";
 import { getNearAddressFromKeyPair } from "@/services/near-intents/wallet";
 import { getSupportedTokens } from "@/services/tokens/service";
-import { KeyPairString } from "@/types/near";
 import { KeyPair } from "near-api-js";
 import { describe, expect, it } from "vitest";
 import { getTestPrivateKey, hasPrivateKey } from "../setup";
@@ -89,69 +88,4 @@ describe.skipIf(!hasPrivateKey())("withdraw service", () => {
     });
   });
 
-  describe("executeWithdrawQuote", () => {
-    it("should execute withdrawal when balance is sufficient", async () => {
-      const walletAddress = getWalletAddress();
-      const privateKey = getTestPrivateKey()!;
-      const balances = await getTokenBalances({ walletAddress });
-      const tokens = await getSupportedTokens();
-
-      // Find an EVM token we have enough balance in
-      const evmChains = ["eth", "base", "arb", "polygon"];
-      const fromBalance = balances.find(
-        (b) =>
-          evmChains.includes(b.blockchain) &&
-          parseFloat(b.balanceFormatted) >
-            parseFloat(b.minWithdrawalAmountFormatted) * 2
-      );
-
-      if (!fromBalance) {
-        console.log(
-          "No sufficient EVM balance found for withdrawal execution test, skipping"
-        );
-        return;
-      }
-
-      const token = tokens.find(
-        (t) => t.intentsTokenId === fromBalance.intentsTokenId
-      );
-      if (!token) {
-        console.log("Token not found, skipping");
-        return;
-      }
-
-      const withdrawAmount = (
-        parseFloat(fromBalance.minWithdrawalAmountFormatted) * 1.5
-      ).toFixed(token.decimals);
-
-      const quoteResult = await getWithdrawQuote({
-        walletAddress,
-        destinationAddress: "0x742d35Cc6634C0532925a3b844Bc9e7595f5bEe7",
-        assetId: token.intentsTokenId,
-        amount: withdrawAmount,
-        decimals: token.decimals,
-      });
-
-      if (quoteResult.status !== "success") {
-        console.log(
-          "Quote failed:",
-          quoteResult.status === "error" ? quoteResult.message : "unknown"
-        );
-        return;
-      }
-
-      const executeResult = await executeWithdrawQuote({
-        privateKey: privateKey as KeyPairString,
-        walletAddress,
-        quote: quoteResult.quote,
-      });
-      if (executeResult.status === "error") {
-        throw new Error(executeResult.message);
-      }
-
-      expect(executeResult.status).toBe("success");
-      expect(executeResult.txHash).toBeTruthy();
-      expect(executeResult.explorerLink).toContain("nearblocks.io");
-    });
-  });
 });

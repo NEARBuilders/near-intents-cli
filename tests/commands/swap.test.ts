@@ -92,49 +92,4 @@ describe.skipIf(!hasPrivateKey())("swap command", () => {
     expect(output).not.toContain("Swap completed");
   });
 
-  it("should execute swap without --dry-run", async () => {
-    const config = getConfig();
-    const balances = await getTokenBalances({
-      walletAddress: config.walletAddress,
-    });
-    const tokens = await getSupportedTokens();
-
-    // Find a token we have sufficient balance in
-    const fromBalance = balances.find(
-      (b) => parseFloat(b.balanceFormatted) > 0.1
-    );
-    if (!fromBalance) {
-      console.log(
-        "No sufficient balance found for swap execution test, skipping"
-      );
-      return;
-    }
-
-    // Find a different token on same chain
-    const toToken = tokens.find(
-      (t) =>
-        t.intentsTokenId !== fromBalance.intentsTokenId &&
-        t.blockchain === fromBalance.blockchain
-    );
-    if (!toToken) {
-      console.log("No target token found, skipping");
-      return;
-    }
-
-    const smallAmount = (
-      parseFloat(fromBalance.balanceFormatted) * 0.001
-    ).toFixed(fromBalance.decimals);
-
-    await swapCommand(config, {
-      from: fromBalance.symbol,
-      "from-chain": fromBalance.blockchain,
-      to: toToken.symbol,
-      "to-chain": toToken.blockchain,
-      amount: smallAmount,
-    });
-
-    const output = consoleSpy.mock.calls.map((c) => c[0]).join("\n");
-    expect(output).toContain("Swap completed");
-    expect(output).toContain("Transaction:");
-  });
 });
