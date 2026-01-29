@@ -71,6 +71,10 @@ export async function withdrawCommand(
   });
 
   console.log(`\nWithdrawal submitted!`);
-  console.log(`Transaction: ${result.txHash}`);
-  console.log(`Explorer: ${result.explorerLink}`);
+  if (result.status === "success") {
+    console.log(`Transaction: ${result.txHash}`);
+    console.log(`Explorer: ${result.explorerLink}`);
+  } else {
+    console.log(`Error: ${result.message}`);
+  }
 }
