@@ -56,7 +56,7 @@
 		"lint": "biome check --write --unsafe"
 	},
 	"dependencies": {
-	    "@defuse-protocol/intents-sdk": "0.45.1",
+		"@defuse-protocol/intents-sdk": "0.45.1",
 		"@defuse-protocol/internal-utils": "0.24.1",
 		"@defuse-protocol/one-click-sdk-typescript": "^0.1.1-0.2",
 		"@scure/base": "^2.0.0",
