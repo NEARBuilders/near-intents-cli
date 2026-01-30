@@ -4,6 +4,7 @@ import { configCommand } from "./commands/config";
 import { depositCommand } from "./commands/deposit";
 import { swapCommand } from "./commands/swap";
 import { tokensCommand } from "./commands/tokens";
+import { transferCommand } from "./commands/transfer";
 import { withdrawCommand } from "./commands/withdraw";
 import { loadConfig } from "./config";
 
@@ -28,13 +29,14 @@ Cross-chain token swaps via intent-based execution.
 ${COLORS.yellow}API KEY:${COLORS.reset}
   Get free key: ${COLORS.green}https://partners.near-intents.org/${COLORS.reset}
   Without key: 0.1% swap fee
-  Set: near-intents config set api-key <key>
+  Set: near-intents-cli config set api-key <key>
 
 ${COLORS.bright}${COLORS.cyan}COMMANDS:${COLORS.reset}
   ${COLORS.green}tokens${COLORS.reset}      List/search supported tokens
   ${COLORS.green}balances${COLORS.reset}   Show wallet balances
   ${COLORS.green}deposit${COLORS.reset}    Get deposit address
   ${COLORS.green}swap${COLORS.reset}       Execute token swap
+  ${COLORS.green}transfer${COLORS.reset}   Transfer to another near-intents account
   ${COLORS.green}withdraw${COLORS.reset}   Withdraw to external address
   ${COLORS.green}config${COLORS.reset}     Manage settings (api-key, private-key)
 
@@ -58,6 +60,13 @@ ${COLORS.bright}${COLORS.cyan}COMMAND OPTIONS:${COLORS.reset}
     --amount <num>              Amount to swap (required)
     --dry-run                   Show quote without executing
 
+  ${COLORS.green}transfer:${COLORS.reset}
+    --to <address>              Destination near-intents address (required)
+    --amount <num>              Amount to transfer (required)
+    --token <symbol>            Token symbol (required)
+    --blockchain <chain>        Blockchain (if token on multiple chains)
+    --dry-run                   Show quote without executing
+
   ${COLORS.green}withdraw:${COLORS.reset}
     --to <address>              Destination address (required)
     --amount <num>              Amount to withdraw (required)
@@ -73,14 +82,15 @@ ${COLORS.bright}${COLORS.cyan}COMMAND OPTIONS:${COLORS.reset}
     clear                       Remove config file
 
 ${COLORS.bright}${COLORS.cyan}EXAMPLES:${COLORS.reset}
-  near-intents config generate-key
-  near-intents config set api-key YOUR_KEY
-  near-intents tokens --search USDC
-  near-intents balances
-  near-intents deposit --token USDC --blockchain eth
-  near-intents swap --from USDC --to NEAR --amount 100
-  near-intents swap --from USDC --to NEAR --amount 100 --dry-run
-  near-intents withdraw --to 0x123... --amount 50 --token USDC --blockchain eth
+  near-intents-cli config generate-key
+  near-intents-cli config set api-key YOUR_KEY
+  near-intents-cli tokens --search USDC
+  near-intents-cli balances
+  near-intents-cli deposit --token USDC --blockchain eth
+  near-intents-cli swap --from USDC --to NEAR --amount 100
+  near-intents-cli swap --from USDC --to NEAR --amount 100 --dry-run
+  near-intents-cli transfer --to 0x... --amount 50 --token USDC
+  near-intents-cli withdraw --to 0x123... --amount 50 --token USDC --blockchain eth
 
 ${COLORS.bright}${COLORS.cyan}EXIT CODES:${COLORS.reset}
   0  Success
@@ -127,7 +137,7 @@ async function main() {
 
 	// Handle --version / -v
 	if (flags.version === "true" || flags.v === "true") {
-		console.log(`near-intents v${VERSION}`);
+		console.log(`near-intents-cli v${VERSION}`);
 		return;
 	}
 
@@ -163,6 +173,12 @@ async function main() {
 			case "swap": {
 				const config = loadConfig();
 				await swapCommand(config, flags);
+				break;
+			}
+
+			case "transfer": {
+				const config = loadConfig();
+				await transferCommand(config, flags);
 				break;
 			}
 

@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@defuse-protocol/intents-sdk':
-        specifier: ^0.46.1
-        version: 0.46.1(d02421ee0230378d92c629cbdeade5e1)
+        specifier: 0.45.1
+        version: 0.45.1(d02421ee0230378d92c629cbdeade5e1)
       '@defuse-protocol/internal-utils':
         specifier: 0.24.1
         version: 0.24.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
@@ -377,13 +377,19 @@ packages:
   '@cosmjs/utils@0.37.1':
     resolution: {integrity: sha512-WPDPtHRxhG1xR/3H7xtNtWGgpYdnYj4tTC+nmavuOcPRjyowCS7jZXoi+LWJVKHJoj/s/G/3hH7WW/dqbBygwA==}
 
+  '@defuse-protocol/contract-types@0.4.3':
+    resolution: {integrity: sha512-mxbFoTciNsx5rjosDlgSgheA02VXKHBJh4wNToO0MQcab7PK/tvwhD++/7ABZLxqGOENPyZfN82S4FlgtngSLA==}
+
   '@defuse-protocol/contract-types@0.5.0':
     resolution: {integrity: sha512-hTyl/WYKSCUYbmR9ayYis4sxY9Xa7/jUENLCSEGYvC1Jf+iKZufDlLjkRuVSTpPsoRM8oJeqN0aP09MbgZhxug==}
 
-  '@defuse-protocol/intents-sdk@0.46.1':
-    resolution: {integrity: sha512-ulgZo4fTQX5xVce/p8MsumcUYBL6y4wUADiX5EtMP+wDRJhBPml/hOpggtA0JulB5ZTpmYXnbwGBFmVmrMFzIg==}
+  '@defuse-protocol/intents-sdk@0.45.1':
+    resolution: {integrity: sha512-ohQax2qSEPO6nrU5hO1yUXMKHzjEDxEwGojqjgL9+Dl2hnZdiDtCOovzh/qohZbWermU1Il7tfDqf7/OO48TSA==}
     peerDependencies:
       typescript: ^5
+
+  '@defuse-protocol/internal-utils@0.23.0':
+    resolution: {integrity: sha512-BX0sZHxfmL+qoyCMYesqEGOLWBLm3K2Q+hHTLhZ2t7GQ+F2pEsvkxEW7qoUAPqCl/sXPAhDjOFnJs+o/0XwdbQ==}
 
   '@defuse-protocol/internal-utils@0.24.1':
     resolution: {integrity: sha512-C0ChCxafAyFeNcCB7Upyi3anNyxETaCUK2Ik5+J5zpnV7irC7ikt7e7M/E31FpM/J88UyOeeAOuesxWHvgpeRw==}
@@ -3812,16 +3818,18 @@ snapshots:
   '@cosmjs/utils@0.37.1':
     optional: true
 
+  '@defuse-protocol/contract-types@0.4.3': {}
+
   '@defuse-protocol/contract-types@0.5.0':
     dependencies:
       '@standard-schema/spec': 1.1.0
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
 
-  '@defuse-protocol/intents-sdk@0.46.1(d02421ee0230378d92c629cbdeade5e1)':
+  '@defuse-protocol/intents-sdk@0.45.1(d02421ee0230378d92c629cbdeade5e1)':
     dependencies:
-      '@defuse-protocol/contract-types': 0.5.0
-      '@defuse-protocol/internal-utils': 0.24.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
+      '@defuse-protocol/contract-types': 0.4.3
+      '@defuse-protocol/internal-utils': 0.23.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
       '@hot-labs/omni-sdk': 2.24.3(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@isaacs/ttlcache': 1.4.1
       '@lifeomic/attempt': 3.1.0
@@ -3856,6 +3864,26 @@ snapshots:
       - google-protobuf
       - got
       - supports-color
+      - utf-8-validate
+      - zod
+
+  '@defuse-protocol/internal-utils@0.23.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)':
+    dependencies:
+      '@defuse-protocol/contract-types': 0.4.3
+      '@lifeomic/attempt': 3.1.0
+      '@noble/hashes': 1.8.0
+      '@peculiar/asn1-ecc': 2.6.0
+      '@peculiar/asn1-schema': 2.6.0
+      '@scure/base': 1.2.6
+      '@thames/monads': 0.7.0
+      near-api-js: 5.1.1
+      tweetnacl: 1.0.3
+      valibot: 1.2.0(typescript@5.9.3)
+      viem: 2.43.5(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - typescript
       - utf-8-validate
       - zod
 

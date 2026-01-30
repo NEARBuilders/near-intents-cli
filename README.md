@@ -6,6 +6,7 @@ SDK and CLI for NEAR Intents - cross-chain token swaps, deposits, and withdrawal
 
 - **Cross-Chain Swaps**: Swap tokens between any supported blockchains with intent-based execution
 - **Deposits**: Generate deposit addresses to fund your wallet from external chains
+- **Internal Transfers**: Instant, fee-free transfers between near-intents accounts
 - **Withdrawals**: Withdraw tokens from your NEAR Intents wallet to external addresses
 - **Balance Management**: View token balances across all supported chains
 - **Token Discovery**: Search and browse all supported tokens with pricing information
@@ -53,13 +54,13 @@ bun add -g near-intents-cli
 Then run commands directly:
 
 ```bash
-near-intents tokens --search USDC
-near-intents balances
+near-intents-cli tokens --search USDC
+near-intents-cli balances
 ```
 
 ## Quick Start
 
-All examples below use `near-intents` assuming you've installed the CLI globally. If you haven't installed it, prefix commands with your package runner:
+All examples below use `near-intents-cli` assuming you've installed the CLI globally. If you haven't installed it, prefix commands with your package runner:
 
 ```bash
 # Using pnpm dlx
@@ -77,7 +78,7 @@ npx near-intents-cli <command>
 If you don't have a NEAR account, generate a new key pair:
 
 ```bash
-near-intents config generate-key
+near-intents-cli config generate-key
 ```
 
 This creates a new ed25519 key pair and saves it to `~/.near-intents/config.json`. The wallet address will be displayed for you to fund.
@@ -87,7 +88,7 @@ This creates a new ed25519 key pair and saves it to `~/.near-intents/config.json
 For fee-free swaps, get a free API key from [near-intents.org/partners](https://partners.near-intents.org/):
 
 ```bash
-near-intents config set api-key YOUR_API_KEY
+near-intents-cli config set api-key YOUR_API_KEY
 ```
 
 Without an API key, swaps incur a 0.1% fee.
@@ -98,23 +99,23 @@ Deposit tokens to start trading:
 
 ```bash
 # Get a deposit address for USDC on Ethereum
-near-intents deposit --token USDC --blockchain eth
+near-intents-cli deposit --token USDC --blockchain eth
 ```
 
 ### 4. Start Trading
 
 ```bash
 # Check your balances
-near-intents balances
+near-intents-cli balances
 
 # List available tokens
-near-intents tokens --search ETH
+near-intents-cli tokens --search ETH
 
 # Execute a swap
-near-intents swap --from USDC --to NEAR --amount 100
+near-intents-cli swap --from USDC --to NEAR --amount 100
 
 # Preview a swap without executing
-near-intents swap --from USDC --to NEAR --amount 100 --dry-run
+near-intents-cli swap --from USDC --to NEAR --amount 100 --dry-run
 ```
 
 ## CLI Commands
@@ -124,9 +125,9 @@ near-intents swap --from USDC --to NEAR --amount 100 --dry-run
 List and search supported tokens.
 
 ```bash
-near-intents tokens
-near-intents tokens --search USDC
-near-intents tokens --search ETH
+near-intents-cli tokens
+near-intents-cli tokens --search USDC
+near-intents-cli tokens --search ETH
 ```
 
 Options:
@@ -140,7 +141,7 @@ Output includes token symbol, blockchain, token ID, decimals, and USD price.
 Show wallet balances across all supported tokens and blockchains.
 
 ```bash
-near-intents balances
+near-intents-cli balances
 ```
 
 Requires a configured private key. Displays wallet address and a table of all token balances.
@@ -150,8 +151,8 @@ Requires a configured private key. Displays wallet address and a table of all to
 Get a deposit address to fund your wallet from external chains.
 
 ```bash
-near-intents deposit --token <symbol>
-near-intents deposit --token USDC --blockchain eth
+near-intents-cli deposit --token <symbol>
+near-intents-cli deposit --token USDC --blockchain eth
 ```
 
 Options:
@@ -166,9 +167,9 @@ Output includes the deposit address, chain information, and minimum deposit amou
 Execute a cross-chain token swap.
 
 ```bash
-near-intents swap --from <symbol> --to <symbol> --amount <amount>
-near-intents swap --from USDC --to NEAR --amount 100
-near-intents swap --from ETH --to SOL --amount 1.5 --from-chain eth --to-chain sol
+near-intents-cli swap --from <symbol> --to <symbol> --amount <amount>
+near-intents-cli swap --from USDC --to NEAR --amount 100
+near-intents-cli swap --from ETH --to SOL --amount 1.5 --from-chain eth --to-chain sol
 ```
 
 Options:
@@ -180,13 +181,30 @@ Options:
 - `--amount <num>` - Amount to swap (required)
 - `--dry-run` - Show quote without executing the swap
 
+### transfer
+
+Transfer tokens to another near-intents account. Internal transfers are instant and fee-free.
+
+```bash
+near-intents-cli transfer --to <address> --amount <amount> --token <symbol>
+near-intents-cli transfer --to 0x1234567890abcdef --amount 50 --token USDC
+```
+
+Options:
+
+- `--to <address>` - Destination near-intents address (required)
+- `--amount <num>` - Amount to transfer (required)
+- `--token <symbol>` - Token symbol (required)
+- `--blockchain <chain>` - Blockchain (if token exists on multiple chains)
+- `--dry-run` - Show quote without executing the transfer
+
 ### withdraw
 
 Withdraw tokens from your NEAR Intents wallet to an external address.
 
 ```bash
-near-intents withdraw --to <address> --amount <amount> --token <symbol>
-near-intents withdraw --to 0x1234567890abcdef --amount 50 --token USDC --blockchain eth
+near-intents-cli withdraw --to <address> --amount <amount> --token <symbol>
+near-intents-cli withdraw --to 0x1234567890abcdef --amount 50 --token USDC --blockchain eth
 ```
 
 Options:
@@ -203,19 +221,19 @@ Manage CLI configuration settings.
 
 ```bash
 # Show current configuration
-near-intents config get
+near-intents-cli config get
 
 # Set API key
-near-intents config set api-key YOUR_API_KEY
+near-intents-cli config set api-key YOUR_API_KEY
 
 # Set private key
-near-intents config set private-key ed25519:YOUR_PRIVATE_KEY
+near-intents-cli config set private-key ed25519:YOUR_PRIVATE_KEY
 
 # Generate a new NEAR key pair
-near-intents config generate-key
+near-intents-cli config generate-key
 
 # Clear all configuration
-near-intents config clear
+near-intents-cli config clear
 ```
 
 The config file is stored at `~/.near-intents/config.json`.
@@ -230,6 +248,8 @@ import {
   getTokenBalances,
   getSwapQuote,
   executeSwapQuote,
+  getTransferQuote,
+  executeTransfer,
   getWithdrawQuote,
   executeWithdrawQuote,
   getDepositAddress,
@@ -349,6 +369,42 @@ if (quoteResult.status === "success") {
 }
 ```
 
+### Transfer Operations
+
+```typescript
+import {
+  getTransferQuote,
+  executeTransfer,
+  loadConfig,
+} from "near-intents-cli";
+
+const config = loadConfig();
+
+// Get a transfer quote (validates balance)
+const quoteResult = await getTransferQuote({
+  walletAddress: config.walletAddress,
+  tokenId: "nep141:usdc.near",
+  amount: "50",
+  decimals: 6,
+  toAddress: "0x1234567890abcdef",
+});
+
+if (quoteResult.status === "success") {
+  console.log(`Amount: ${quoteResult.amountFormatted}`);
+
+  // Execute the transfer
+  const result = await executeTransfer({
+    privateKey: config.privateKey,
+    tokenId: "nep141:usdc.near",
+    amount: quoteResult.amount,
+    toAddress: "0x1234567890abcdef",
+  });
+
+  console.log(`Transaction: ${result.txHash}`);
+  console.log(`Explorer: ${result.explorerLink}`);
+}
+```
+
 ### Deposit Operations
 
 ```typescript
@@ -442,6 +498,7 @@ near-intents-cli/
 │   │   ├── tokens/         # Token listing and search
 │   │   ├── balance/        # Balance queries
 │   │   ├── swap/           # Swap quotes and execution
+│   │   ├── transfer/       # Internal transfer between accounts
 │   │   ├── withdraw/       # Withdrawal quotes and execution
 │   │   ├── deposit/        # Deposit address generation
 │   │   ├── near-intents/   # NEAR SDK integration

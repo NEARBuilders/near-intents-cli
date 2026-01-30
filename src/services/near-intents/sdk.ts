@@ -16,7 +16,7 @@ export const getNearIntentsSDK = async ({
 
 	return new IntentsSDK({
 		env: "production",
-		referral: "near-dca",
+		referral: "near-intents-cli",
 		intentSigner: createIntentSignerNearKeyPair({
 			signer: keyPair,
 			accountId: account.accountId,
