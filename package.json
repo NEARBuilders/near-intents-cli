@@ -39,6 +39,10 @@
     "solana"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NEARBuilders/near-intents-cli"
+  },
   "engines": {
     "node": ">=18"
   },
