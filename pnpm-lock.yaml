@@ -9,17 +9,20 @@ importers:
   .:
     dependencies:
       '@defuse-protocol/intents-sdk':
-        specifier: 0.45.1
-        version: 0.45.1(d02421ee0230378d92c629cbdeade5e1)
+        specifier: ^0.43.3
+        version: 0.43.3(d02421ee0230378d92c629cbdeade5e1)
       '@defuse-protocol/internal-utils':
-        specifier: 0.24.1
-        version: 0.24.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
+        specifier: 0.15.1
+        version: 0.15.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
       '@defuse-protocol/one-click-sdk-typescript':
         specifier: ^0.1.1-0.2
         version: 0.1.15
       '@scure/base':
         specifier: ^2.0.0
         version: 2.0.0
+      '@thames/monads':
+        specifier: ^0.7.0
+        version: 0.7.0
       borsh:
         specifier: ^2.0.0
         version: 2.0.0
@@ -39,7 +42,7 @@ importers:
         specifier: ^0.11.1
         version: 0.11.1
       near-api-js:
-        specifier: ^6.5.1
+        specifier: ^6.1.0
         version: 6.5.1(dc1acee1e8cf2bcbbf759f9269b166a5)
       tweetnacl:
         specifier: ^1.0.3
@@ -377,22 +380,22 @@ packages:
   '@cosmjs/utils@0.37.1':
     resolution: {integrity: sha512-WPDPtHRxhG1xR/3H7xtNtWGgpYdnYj4tTC+nmavuOcPRjyowCS7jZXoi+LWJVKHJoj/s/G/3hH7WW/dqbBygwA==}
 
+  '@defuse-protocol/contract-types@0.1.2':
+    resolution: {integrity: sha512-k1iSaCcJF2zYHjRzbPanyBfb9LxOQYsQUq4BKjWrh92LtNZbB4GhdCm1wkyJR2Jbeq5gEciF8TAGV9VqsQXSwg==}
+
   '@defuse-protocol/contract-types@0.4.3':
     resolution: {integrity: sha512-mxbFoTciNsx5rjosDlgSgheA02VXKHBJh4wNToO0MQcab7PK/tvwhD++/7ABZLxqGOENPyZfN82S4FlgtngSLA==}
 
-  '@defuse-protocol/contract-types@0.5.0':
-    resolution: {integrity: sha512-hTyl/WYKSCUYbmR9ayYis4sxY9Xa7/jUENLCSEGYvC1Jf+iKZufDlLjkRuVSTpPsoRM8oJeqN0aP09MbgZhxug==}
-
-  '@defuse-protocol/intents-sdk@0.45.1':
-    resolution: {integrity: sha512-ohQax2qSEPO6nrU5hO1yUXMKHzjEDxEwGojqjgL9+Dl2hnZdiDtCOovzh/qohZbWermU1Il7tfDqf7/OO48TSA==}
+  '@defuse-protocol/intents-sdk@0.43.3':
+    resolution: {integrity: sha512-nRs9dF6FBjfS+KD3CWHjtLxLVlIOlqnBcb7KCFeXlAuLhWPBDY4A+KqNTqPy5yvkICIxPofjWObIMLVBeayS4g==}
     peerDependencies:
       typescript: ^5
 
-  '@defuse-protocol/internal-utils@0.23.0':
-    resolution: {integrity: sha512-BX0sZHxfmL+qoyCMYesqEGOLWBLm3K2Q+hHTLhZ2t7GQ+F2pEsvkxEW7qoUAPqCl/sXPAhDjOFnJs+o/0XwdbQ==}
+  '@defuse-protocol/internal-utils@0.15.1':
+    resolution: {integrity: sha512-0ISqmg1JdeOXusdU65DhT7pLftGj0xTgJGh5nqMj85AMeAG9CnE7eH4v1ypoUeaX6ZLkXJ7OmRejYbp03ZXLLA==}
 
-  '@defuse-protocol/internal-utils@0.24.1':
-    resolution: {integrity: sha512-C0ChCxafAyFeNcCB7Upyi3anNyxETaCUK2Ik5+J5zpnV7irC7ikt7e7M/E31FpM/J88UyOeeAOuesxWHvgpeRw==}
+  '@defuse-protocol/internal-utils@0.21.1':
+    resolution: {integrity: sha512-5epK/1K43kOChRqe43LJ1K2lM3rMN8oudN7wVM8+rP6tQjzHSW7AYROrIMf5pnVZ8/E/P+XIRBmTfB6lnF8Qtw==}
 
   '@defuse-protocol/one-click-sdk-typescript@0.1.15':
     resolution: {integrity: sha512-cVwmBiTQdjyA+nPOrw+AKQjRK1uCfRNVM9RXeWtcKRCXzwNuEyu34hhqOl2mWwBHnqFZEO3iz3kYK+SomEbMgA==}
@@ -1664,17 +1667,6 @@ packages:
     resolution: {integrity: sha512-kja8j7PjmncONqaTsB8fQ+wE2mSU2DJ9D4XKoJ5PFWIdRMa6SLSN1ff4mOr4jCbfRSsxR4keIiySJU0N9T5hIQ==}
     engines: {node: '>= 8.0.0'}
 
-  ajv-formats@3.0.1:
-    resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
-    peerDependencies:
-      ajv: ^8.0.0
-    peerDependenciesMeta:
-      ajv:
-        optional: true
-
-  ajv@8.17.1:
-    resolution: {integrity: sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==}
-
   algo-msgpack-with-bigint@2.1.1:
     resolution: {integrity: sha512-F1tGh056XczEaEAqu7s+hlZUDWwOBT70Eq0lfMpBP2YguSQVyxRbprLq5rELXKQOyOaixTWYhMeMQMzP0U5FoQ==}
     engines: {node: '>= 10'}
@@ -2075,18 +2067,12 @@ packages:
     resolution: {integrity: sha512-GipyPsXO1anza0AOZdy69Im7hGFCNB7Y/NGjDlZGJ3GJJLtwNSb2vrzYrTYJRrRloVx7pl+bhUaTB8yiccPvFQ==}
     engines: {node: '> 0.1.90'}
 
-  fast-deep-equal@3.1.3:
-    resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
-
   fast-glob@3.3.3:
     resolution: {integrity: sha512-7MptL8U0cqcFdzIzwOTHoilX9x5BrNqye7Z/LuC7kCMRio1EMSyqRK3BEAUD7sXRq4iT4AzTVuZdhgQ2TCvYLg==}
     engines: {node: '>=8.6.0'}
 
   fast-stable-stringify@1.0.0:
     resolution: {integrity: sha512-wpYMUmFu5f00Sm0cj2pfivpmawLZ0NKdviQ4w9zJeR8JVtOpOxHmLaJuj0vxvGqMJQWyP/COUkF75/57OKyRag==}
-
-  fast-uri@3.1.0:
-    resolution: {integrity: sha512-iPeeDKJSWf4IEOasVVrknXpaBV0IApz/gp7S2bb7Z4Lljbl2MGJRqInZiUrQwV16cpzw/D3S5j5Julj/gT52AA==}
 
   fastestsmallesttextencoderdecoder@1.0.22:
     resolution: {integrity: sha512-Pb8d48e+oIuY4MaM64Cd7OW1gt4nxCHs7/ddPPZ/Ic3sg8yVGM7O9wDvZ7us6ScaUupzM+pfBolwtYhN1IxBIw==}
@@ -2391,9 +2377,6 @@ packages:
 
   json-bigint@1.0.0:
     resolution: {integrity: sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==}
-
-  json-schema-traverse@1.0.0:
-    resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==}
 
   json-stringify-safe@5.0.1:
     resolution: {integrity: sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==}
@@ -2710,10 +2693,6 @@ packages:
 
   readonly-date@1.0.0:
     resolution: {integrity: sha512-tMKIV7hlk0h4mO3JTmmVuIlJVXjKk3Sep9Bf5OH0O+758ruuVkUy2J9SttDLm91IEX/WHlXPSpxMGjPj4beMIQ==}
-
-  require-from-string@2.0.2:
-    resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
-    engines: {node: '>=0.10.0'}
 
   resolve-alpn@1.2.1:
     resolution: {integrity: sha512-0a1F4l73/ZFZOakJnQ3FvkJ2+gSTQWz/r2KE5OdDY0TxPm5h4GkqkWWfM47T7HsbnOtcJVEF4epCVy6u7Q3K+g==}
@@ -3818,18 +3797,14 @@ snapshots:
   '@cosmjs/utils@0.37.1':
     optional: true
 
+  '@defuse-protocol/contract-types@0.1.2': {}
+
   '@defuse-protocol/contract-types@0.4.3': {}
 
-  '@defuse-protocol/contract-types@0.5.0':
-    dependencies:
-      '@standard-schema/spec': 1.1.0
-      ajv: 8.17.1
-      ajv-formats: 3.0.1(ajv@8.17.1)
-
-  '@defuse-protocol/intents-sdk@0.45.1(d02421ee0230378d92c629cbdeade5e1)':
+  '@defuse-protocol/intents-sdk@0.43.3(d02421ee0230378d92c629cbdeade5e1)':
     dependencies:
       '@defuse-protocol/contract-types': 0.4.3
-      '@defuse-protocol/internal-utils': 0.23.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
+      '@defuse-protocol/internal-utils': 0.21.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
       '@hot-labs/omni-sdk': 2.24.3(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@isaacs/ttlcache': 1.4.1
       '@lifeomic/attempt': 3.1.0
@@ -3867,9 +3842,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@defuse-protocol/internal-utils@0.23.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)':
+  '@defuse-protocol/internal-utils@0.15.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)':
     dependencies:
-      '@defuse-protocol/contract-types': 0.4.3
+      '@defuse-protocol/contract-types': 0.1.2
       '@lifeomic/attempt': 3.1.0
       '@noble/hashes': 1.8.0
       '@peculiar/asn1-ecc': 2.6.0
@@ -3887,9 +3862,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@defuse-protocol/internal-utils@0.24.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)':
+  '@defuse-protocol/internal-utils@0.21.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)':
     dependencies:
-      '@defuse-protocol/contract-types': 0.5.0
+      '@defuse-protocol/contract-types': 0.4.3
       '@lifeomic/attempt': 3.1.0
       '@noble/hashes': 1.8.0
       '@peculiar/asn1-ecc': 2.6.0
@@ -5591,17 +5566,6 @@ snapshots:
     dependencies:
       humanize-ms: 1.2.1
 
-  ajv-formats@3.0.1(ajv@8.17.1):
-    optionalDependencies:
-      ajv: 8.17.1
-
-  ajv@8.17.1:
-    dependencies:
-      fast-deep-equal: 3.1.3
-      fast-uri: 3.1.0
-      json-schema-traverse: 1.0.0
-      require-from-string: 2.0.2
-
   algo-msgpack-with-bigint@2.1.1: {}
 
   algosdk@2.7.0:
@@ -6010,8 +5974,6 @@ snapshots:
 
   eyes@0.1.8: {}
 
-  fast-deep-equal@3.1.3: {}
-
   fast-glob@3.3.3:
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -6021,8 +5983,6 @@ snapshots:
       micromatch: 4.0.8
 
   fast-stable-stringify@1.0.0: {}
-
-  fast-uri@3.1.0: {}
 
   fastestsmallesttextencoderdecoder@1.0.22: {}
 
@@ -6355,8 +6315,6 @@ snapshots:
     dependencies:
       bignumber.js: 9.3.1
 
-  json-schema-traverse@1.0.0: {}
-
   json-stringify-safe@5.0.1: {}
 
   jsonfile@4.0.0:
@@ -6678,8 +6636,6 @@ snapshots:
   readdirp@5.0.0: {}
 
   readonly-date@1.0.0: {}
-
-  require-from-string@2.0.2: {}
 
   resolve-alpn@1.2.1: {}
 

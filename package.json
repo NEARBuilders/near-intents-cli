@@ -1,7 +1,7 @@
 {
 	"name": "near-intents-cli",
-	"version": "0.1.0",
-	"description": "SDK and CLI for NEAR Intents - cross-chain token swaps, deposits, transfers and withdrawals",
+	"version": "0.2.0",
+	"description": "SDK and CLI for NEAR Intents - cross-chain token swaps, deposits, and withdrawals",
 	"type": "module",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
@@ -39,6 +39,10 @@
 		"solana"
 	],
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/NEARBuilders/near-intents-cli"
+	},
 	"engines": {
 		"node": ">=18"
 	},
@@ -52,21 +56,23 @@
 		"test:watch": "vitest",
 		"changeset": "changeset",
 		"version": "changeset version",
+		"ci:version": "changeset version && pnpm install --lockfile-only",
 		"release": "pnpm build && changeset publish --access public",
 		"lint": "biome check --write --unsafe"
 	},
 	"dependencies": {
-		"@defuse-protocol/intents-sdk": "0.45.1",
-		"@defuse-protocol/internal-utils": "0.24.1",
+		"@defuse-protocol/intents-sdk": "^0.43.3",
+		"@defuse-protocol/internal-utils": "0.15.1",
 		"@defuse-protocol/one-click-sdk-typescript": "^0.1.1-0.2",
 		"@scure/base": "^2.0.0",
+		"@thames/monads": "^0.7.0",
 		"borsh": "^2.0.0",
 		"borsher": "^4.0.0",
 		"bs58": "^6.0.0",
 		"dotenv": "^16.4.7",
 		"fuse.js": "^7.1.0",
 		"js-sha256": "^0.11.1",
-		"near-api-js": "^6.5.1",
+		"near-api-js": "^6.1.0",
 		"tweetnacl": "^1.0.3",
 		"viem": "^2.37.8",
 		"zod": "^4.0.14"
