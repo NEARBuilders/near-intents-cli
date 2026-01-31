@@ -1,5 +1,11 @@
 # near-intents-cli
 
+## 0.3.0
+
+### Minor Changes
+
+- 9d1463a: Add Transfer Operations between two near-intents addresses
+
 ## 0.2.0
 
 ### Minor Changes

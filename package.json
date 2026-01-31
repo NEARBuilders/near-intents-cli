@@ -1,6 +1,6 @@
 {
 	"name": "near-intents-cli",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "SDK and CLI for NEAR Intents - cross-chain token swaps, deposits, and withdrawals",
 	"type": "module",
 	"main": "./dist/index.cjs",
