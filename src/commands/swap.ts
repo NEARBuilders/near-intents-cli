@@ -7,7 +7,7 @@ function showFeeNotice() {
 		console.log(
 			"\nNo API key configured. Swaps incur 0.1% fee.\n" +
 				"Get free key: https://partners.near-intents.org/\n" +
-				"Run: near-intents config set api-key <your-key>\n",
+				"Run: near-intents-cli config set api-key <your-key>\n",
 		);
 	}
 }

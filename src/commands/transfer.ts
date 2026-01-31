@@ -1,21 +1,11 @@
-import { type Config, hasApiKey } from "../config";
+import type { Config } from "../config";
 import {
-	executeWithdrawQuote,
-	getWithdrawQuote,
-} from "../services/withdraw/service";
+	executeTransfer,
+	getTransferQuote,
+} from "../services/transfer/service";
 import { resolveToken } from "../utils/token";
 
-function showFeeNotice() {
-	if (!hasApiKey()) {
-		console.log(
-			"\nNo API key configured. Withdrawals incur 0.1% fee.\n" +
-				"Get free key: https://partners.near-intents.org/\n" +
-				"Run: near-intents-cli config set api-key <your-key>\n",
-		);
-	}
-}
-
-export async function withdrawCommand(
+export async function transferCommand(
 	config: Config,
 	flags: Record<string, string>,
 ) {
@@ -29,48 +19,47 @@ export async function withdrawCommand(
 	if (!amount) throw new Error("--amount is required");
 	if (!symbol) throw new Error("--token is required");
 
-	showFeeNotice();
-
 	const token = await resolveToken(symbol, blockchain, "--blockchain");
 
-	console.log(`Getting withdrawal quote...`);
+	console.log(`Getting transfer quote...`);
 	console.log(`Token: ${token.symbol} (${token.blockchain})`);
 	console.log(`Amount: ${amount}`);
 	console.log(`Destination: ${toAddress}`);
 
-	const quoteResult = await getWithdrawQuote({
+	const quoteResult = await getTransferQuote({
 		walletAddress: config.walletAddress,
-		destinationAddress: toAddress,
-		assetId: token.intentsTokenId,
+		tokenId: token.intentsTokenId,
 		amount,
 		decimals: token.decimals,
+		toAddress,
 	});
 
 	if (quoteResult.status === "error") {
 		throw new Error(quoteResult.message);
 	}
 
-	console.log(`\nQuote received:`);
+	console.log(`\nTransfer details:`);
 	console.log(`  Amount: ${quoteResult.amountFormatted} ${token.symbol}`);
-	console.log(`  Fee: ${quoteResult.transferFeeFormatted} ${token.symbol}`);
+	console.log(`  Fee: 0 (internal transfer)`);
 	console.log(
-		`  You receive: ${quoteResult.receivedAmountFormatted} ${token.symbol}`,
+		`  Recipient receives: ${quoteResult.amountFormatted} ${token.symbol}`,
 	);
 
 	if (dryRun) {
-		console.log(`\n(Dry run - withdrawal not executed)`);
+		console.log(`\n(Dry run - transfer not executed)`);
 		return;
 	}
 
-	console.log(`\nExecuting withdrawal...`);
+	console.log(`\nExecuting transfer...`);
 
-	const result = await executeWithdrawQuote({
+	const result = await executeTransfer({
 		privateKey: config.privateKey,
-		walletAddress: config.walletAddress,
-		quote: quoteResult.quote,
+		tokenId: token.intentsTokenId,
+		amount: quoteResult.amount,
+		toAddress,
 	});
 
-	console.log(`\nWithdrawal submitted!`);
+	console.log(`\nTransfer submitted!`);
 	if (result.status === "success") {
 		console.log(`Transaction: ${result.txHash}`);
 		console.log(`Explorer: ${result.explorerLink}`);

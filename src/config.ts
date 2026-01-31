@@ -98,8 +98,8 @@ export function loadConfig(): Config {
 	if (!privateKey) {
 		throw new Error(
 			"Private key required. Provide via:\n" +
-				"  near-intents config generate-key\n" +
-				"  near-intents config set private-key <key>\n" +
+				"  near-intents-cli config generate-key\n" +
+				"  near-intents-cli config set private-key <key>\n" +
 				"  NEAR_PRIVATE_KEY environment variable",
 		);
 	}

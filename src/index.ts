@@ -22,10 +22,7 @@ export {
 // Balances
 // ============================================================================
 export { getTokenBalances } from "./services/balance/balances";
-export type {
-	BalanceResponse,
-	TokenBalance,
-} from "./services/balance/schema";
+export type { BalanceResponse, TokenBalance } from "./services/balance/schema";
 // ============================================================================
 // Deposit
 // ============================================================================
@@ -80,6 +77,19 @@ export {
 	searchTokens,
 	searchTokensBySymbol,
 } from "./services/tokens/service";
+export type {
+	TransferQuoteResponse,
+	TransferRequest,
+	TransferSubmitResponse,
+} from "./services/transfer/schema";
+// ============================================================================
+// Transfer
+// ============================================================================
+export {
+	executeTransfer,
+	getTransferQuote,
+	transferToken,
+} from "./services/transfer/service";
 export type {
 	WithdrawQuoteErrorInternal,
 	WithdrawQuoteRequest,

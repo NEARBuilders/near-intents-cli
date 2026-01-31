@@ -1,4 +1,5 @@
-import { KeyPair, type KeyPairString } from "near-api-js";
+import { KeyPair } from "near-api-js";
+import type { KeyPairString } from "@/types/near";
 import {
 	clearStoredConfig,
 	getConfigPath,
@@ -22,7 +23,7 @@ export async function configCommand(flags: Record<string, string>) {
 		case "generate-key":
 			return configGenerateKey();
 		default:
-			console.log(`Usage: near-intents config <command>
+			console.log(`Usage: near-intents-cli config <command>
 
 Commands:
   set api-key <key>      Save API key to config file
@@ -74,8 +75,8 @@ function configGet() {
 	if (!config.apiKey && !config.privateKey) {
 		console.log(`No config found at ${configPath}`);
 		console.log("\nTo get started:");
-		console.log("  near-intents config generate-key");
-		console.log("  near-intents config set api-key <key>");
+		console.log("  near-intents-cli config generate-key");
+		console.log("  near-intents-cli config set api-key <key>");
 		return;
 	}
 
@@ -109,7 +110,7 @@ function configGenerateKey() {
 
 	if (config.privateKey) {
 		console.error("Error: Private key already exists in config.");
-		console.error("Run 'near-intents config clear' first to remove it.");
+		console.error("Run 'near-intents-cli config clear' first to remove it.");
 		process.exit(1);
 	}
 
@@ -123,5 +124,5 @@ function configGenerateKey() {
 	console.log(`New key pair generated and saved to ${getConfigPath()}\n`);
 	console.log(`Wallet address: ${address}`);
 	console.log(`\nTo fund this wallet, deposit tokens using:`);
-	console.log(`  near-intents deposit --token USDC --blockchain eth`);
+	console.log(`  near-intents-cli deposit --token USDC --blockchain eth`);
 }

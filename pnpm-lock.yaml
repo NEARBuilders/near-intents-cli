@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@biomejs/biome':
-        specifier: 2.3.13
-        version: 2.3.13
       '@defuse-protocol/intents-sdk':
         specifier: ^0.43.3
         version: 0.43.3(d02421ee0230378d92c629cbdeade5e1)
@@ -23,6 +20,9 @@ importers:
       '@scure/base':
         specifier: ^2.0.0
         version: 2.0.0
+      '@thames/monads':
+        specifier: ^0.7.0
+        version: 0.7.0
       borsh:
         specifier: ^2.0.0
         version: 2.0.0
@@ -54,6 +54,9 @@ importers:
         specifier: ^4.0.14
         version: 4.3.5
     devDependencies:
+      '@biomejs/biome':
+        specifier: 2.3.13
+        version: 2.3.13
       '@changesets/cli':
         specifier: ^2.29.8
         version: 2.29.8(@types/node@22.19.3)
