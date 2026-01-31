@@ -19,7 +19,7 @@ SDK and CLI for NEAR Intents - cross-chain token swaps, deposits, and withdrawal
 - Ethereum
 - Solana
 - Stellar (with memo support)
-- And more chains supported by the Defuse Protocol
+- And more chains supported by the Near Intents
 
 ## Installation
 
