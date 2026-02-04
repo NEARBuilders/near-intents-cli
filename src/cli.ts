@@ -7,8 +7,7 @@ import { tokensCommand } from "./commands/tokens";
 import { transferCommand } from "./commands/transfer";
 import { withdrawCommand } from "./commands/withdraw";
 import { loadConfig } from "./config";
-
-const VERSION = "0.1.0";
+import { version } from "../package.json";
 
 // ANSI color codes for terminal styling
 const COLORS = {
@@ -23,7 +22,7 @@ const COLORS = {
 };
 
 const HELP = `
-${COLORS.bright}${COLORS.cyan}Near Intents CLI${COLORS.reset} v${VERSION}
+${COLORS.bright}${COLORS.cyan}Near Intents CLI${COLORS.reset} v${version}
 Cross-chain token swaps via intent-based execution.
 
 ${COLORS.yellow}API KEY:${COLORS.reset}
@@ -137,7 +136,7 @@ async function main() {
 
 	// Handle --version / -v
 	if (flags.version === "true" || flags.v === "true") {
-		console.log(`near-intents-cli v${VERSION}`);
+		console.log(`near-intents-cli v${version}`);
 		return;
 	}
 

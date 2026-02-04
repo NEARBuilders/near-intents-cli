@@ -6,9 +6,13 @@ export default defineConfig({
 	test: {
 		include: ["tests/**/*.test.ts"],
 		environment: "node",
-		globals: false,
 		reporters: ["verbose"],
 		testTimeout: 30000,
 		setupFiles: ["./tests/setup.ts"],
+		server: {
+			deps: {
+				inline: ["@defuse-protocol/intents-sdk", "near-api-js"],
+			},
+		},
 	},
 });

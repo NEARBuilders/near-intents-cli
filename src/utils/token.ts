@@ -1,5 +1,5 @@
+import { searchTokensBySymbol } from "../services/tokens";
 import type { Token } from "../services/tokens/schema";
-import { searchTokensBySymbol } from "../services/tokens/service";
 
 export async function resolveToken(
 	symbol: string,

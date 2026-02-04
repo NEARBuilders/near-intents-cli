@@ -4,11 +4,21 @@ import { formatUnits, parseUnits } from "viem";
 import type { KeyPairString } from "@/types/near";
 import { getTokenBalances } from "../balance/balances";
 import { getOneClickQuote, submitOneClickQuote } from "../oneclick/index";
-import { getSupportedTokens } from "../tokens/service";
+import { getSupportedTokens } from "../tokens";
 import type { SwapExecuteResponse, SwapQuoteResultInternal } from "./schema";
 
 function error(message: string): { status: "error"; message: string } {
 	return { status: "error", message };
+}
+
+function getQuoteExpiresAt(quote: QuoteResponse): number {
+	const parsedDeadline = quote.quote.deadline
+		? Date.parse(quote.quote.deadline)
+		: Number.NaN;
+	if (Number.isFinite(parsedDeadline)) {
+		return parsedDeadline;
+	}
+	return Date.now() + 20 * 60 * 1000;
 }
 
 export async function getSwapQuote({
@@ -76,6 +86,7 @@ export async function getSwapQuote({
 
 	return {
 		status: "success" as const,
+		quoteId: quote.correlationId,
 		quote,
 		fromTokenId,
 		toTokenId,
@@ -84,6 +95,7 @@ export async function getSwapQuote({
 		amountOut: quote.quote.amountOut,
 		amountOutFormatted,
 		exchangeRate,
+		expiresAt: getQuoteExpiresAt(quote),
 	};
 }
 

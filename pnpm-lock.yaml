@@ -9,13 +9,13 @@ importers:
   .:
     dependencies:
       '@defuse-protocol/intents-sdk':
-        specifier: ^0.43.3
-        version: 0.43.3(d02421ee0230378d92c629cbdeade5e1)
+        specifier: ^0.49.0
+        version: 0.49.0(d02421ee0230378d92c629cbdeade5e1)
       '@defuse-protocol/internal-utils':
-        specifier: 0.15.1
-        version: 0.15.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
+        specifier: 0.26.0
+        version: 0.26.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
       '@defuse-protocol/one-click-sdk-typescript':
-        specifier: ^0.1.1-0.2
+        specifier: ^0.1.15
         version: 0.1.15
       '@scure/base':
         specifier: ^2.0.0
@@ -288,6 +288,9 @@ packages:
   '@cosmjs/cosmwasm-stargate@0.32.4':
     resolution: {integrity: sha512-Fuo9BGEiB+POJ5WeRyBGuhyKR1ordvxZGLPuPosFJOH9U0gKMgcjwKMCgAlWFkMlHaTB+tNdA8AifWiHrI7VgA==}
 
+  '@cosmjs/cosmwasm-stargate@0.37.0':
+    resolution: {integrity: sha512-q3bezZzAIyPpUT89CpQrOhI6xJU4wiMU0ufN5nsPtRaZ1Cn8mwoj76j56wb7lvwsAPIk7ALjVbQwULmn7hii6A==}
+
   '@cosmjs/crypto@0.32.4':
     resolution: {integrity: sha512-zicjGU051LF1V9v7bp8p7ovq+VyC91xlaHdsFOTo2oVry3KQikp8L/81RkXmUIT8FxMwdx1T7DmFwVQikcSDIw==}
     deprecated: This uses elliptic for cryptographic operations, which contains several security-relevant bugs. To what degree this affects your application is something you need to carefully investigate. See https://github.com/cosmos/cosmjs/issues/1708 for further pointers. Starting with version 0.34.0 the cryptographic library has been replaced. However, private keys might still be at risk.
@@ -380,22 +383,16 @@ packages:
   '@cosmjs/utils@0.37.1':
     resolution: {integrity: sha512-WPDPtHRxhG1xR/3H7xtNtWGgpYdnYj4tTC+nmavuOcPRjyowCS7jZXoi+LWJVKHJoj/s/G/3hH7WW/dqbBygwA==}
 
-  '@defuse-protocol/contract-types@0.1.2':
-    resolution: {integrity: sha512-k1iSaCcJF2zYHjRzbPanyBfb9LxOQYsQUq4BKjWrh92LtNZbB4GhdCm1wkyJR2Jbeq5gEciF8TAGV9VqsQXSwg==}
+  '@defuse-protocol/contract-types@0.6.0':
+    resolution: {integrity: sha512-i9kYunvkTWWbBPx9qiajRYTPUL/fwQHIhTdqffLD4xpvX1n1A5zi0J3RekXpWjuFmo4ee22FmBqIR4H0atF30g==}
 
-  '@defuse-protocol/contract-types@0.4.3':
-    resolution: {integrity: sha512-mxbFoTciNsx5rjosDlgSgheA02VXKHBJh4wNToO0MQcab7PK/tvwhD++/7ABZLxqGOENPyZfN82S4FlgtngSLA==}
-
-  '@defuse-protocol/intents-sdk@0.43.3':
-    resolution: {integrity: sha512-nRs9dF6FBjfS+KD3CWHjtLxLVlIOlqnBcb7KCFeXlAuLhWPBDY4A+KqNTqPy5yvkICIxPofjWObIMLVBeayS4g==}
+  '@defuse-protocol/intents-sdk@0.49.0':
+    resolution: {integrity: sha512-xxKPXfPy2TXesIMWC0PzNDd8iRZFWdyyWBJcNHvBjj2LV+lKcfRrGqwpkMDXtHncNoF0aFyINGq8OLlRNmPJXQ==}
     peerDependencies:
       typescript: ^5
 
-  '@defuse-protocol/internal-utils@0.15.1':
-    resolution: {integrity: sha512-0ISqmg1JdeOXusdU65DhT7pLftGj0xTgJGh5nqMj85AMeAG9CnE7eH4v1ypoUeaX6ZLkXJ7OmRejYbp03ZXLLA==}
-
-  '@defuse-protocol/internal-utils@0.21.1':
-    resolution: {integrity: sha512-5epK/1K43kOChRqe43LJ1K2lM3rMN8oudN7wVM8+rP6tQjzHSW7AYROrIMf5pnVZ8/E/P+XIRBmTfB6lnF8Qtw==}
+  '@defuse-protocol/internal-utils@0.26.0':
+    resolution: {integrity: sha512-z8Xd/wROQwQa2J2LAXPlcPyWtTts+hg6hHp5JnlC14Ken76Sl2TyvIY0qYJ+BV/Bdz0ra0yNWkNHCYnVS25HDw==}
 
   '@defuse-protocol/one-click-sdk-typescript@0.1.15':
     resolution: {integrity: sha512-cVwmBiTQdjyA+nPOrw+AKQjRK1uCfRNVM9RXeWtcKRCXzwNuEyu34hhqOl2mWwBHnqFZEO3iz3kYK+SomEbMgA==}
@@ -604,8 +601,8 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
-  '@hot-labs/omni-sdk@2.24.3':
-    resolution: {integrity: sha512-J57+VbRqAUqtxgB4xiZITjNXytCQEXK03np/17QZ+YU1pdKYBSqz3bxxOC3xWxkPWQKnAyYtDS1XpIDvZoR3Ag==}
+  '@hot-labs/omni-sdk@2.24.7':
+    resolution: {integrity: sha512-O2b2ZfCNuUCtpc5mSSTI8slNlBTqH9wxqIIIH6ChYWbigHSm8spgSkbAxkcJQP2q+yMDol9DdQ+25+H7WQA0MQ==}
 
   '@injectivelabs/abacus-proto-ts-v2@1.17.4':
     resolution: {integrity: sha512-AVksEOLpMcK+ZQt1E/sXmG4FaZYaYJzXSx2xU4FgoY5Fc/tdA11KHx3Mjx/8OGJS5mTsscNSeV2cxipj1IbANg==}
@@ -1667,6 +1664,17 @@ packages:
     resolution: {integrity: sha512-kja8j7PjmncONqaTsB8fQ+wE2mSU2DJ9D4XKoJ5PFWIdRMa6SLSN1ff4mOr4jCbfRSsxR4keIiySJU0N9T5hIQ==}
     engines: {node: '>= 8.0.0'}
 
+  ajv-formats@3.0.1:
+    resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
+    peerDependencies:
+      ajv: ^8.0.0
+    peerDependenciesMeta:
+      ajv:
+        optional: true
+
+  ajv@8.17.1:
+    resolution: {integrity: sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==}
+
   algo-msgpack-with-bigint@2.1.1:
     resolution: {integrity: sha512-F1tGh056XczEaEAqu7s+hlZUDWwOBT70Eq0lfMpBP2YguSQVyxRbprLq5rELXKQOyOaixTWYhMeMQMzP0U5FoQ==}
     engines: {node: '>= 10'}
@@ -2067,12 +2075,18 @@ packages:
     resolution: {integrity: sha512-GipyPsXO1anza0AOZdy69Im7hGFCNB7Y/NGjDlZGJ3GJJLtwNSb2vrzYrTYJRrRloVx7pl+bhUaTB8yiccPvFQ==}
     engines: {node: '> 0.1.90'}
 
+  fast-deep-equal@3.1.3:
+    resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
+
   fast-glob@3.3.3:
     resolution: {integrity: sha512-7MptL8U0cqcFdzIzwOTHoilX9x5BrNqye7Z/LuC7kCMRio1EMSyqRK3BEAUD7sXRq4iT4AzTVuZdhgQ2TCvYLg==}
     engines: {node: '>=8.6.0'}
 
   fast-stable-stringify@1.0.0:
     resolution: {integrity: sha512-wpYMUmFu5f00Sm0cj2pfivpmawLZ0NKdviQ4w9zJeR8JVtOpOxHmLaJuj0vxvGqMJQWyP/COUkF75/57OKyRag==}
+
+  fast-uri@3.1.0:
+    resolution: {integrity: sha512-iPeeDKJSWf4IEOasVVrknXpaBV0IApz/gp7S2bb7Z4Lljbl2MGJRqInZiUrQwV16cpzw/D3S5j5Julj/gT52AA==}
 
   fastestsmallesttextencoderdecoder@1.0.22:
     resolution: {integrity: sha512-Pb8d48e+oIuY4MaM64Cd7OW1gt4nxCHs7/ddPPZ/Ic3sg8yVGM7O9wDvZ7us6ScaUupzM+pfBolwtYhN1IxBIw==}
@@ -2377,6 +2391,9 @@ packages:
 
   json-bigint@1.0.0:
     resolution: {integrity: sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==}
+
+  json-schema-traverse@1.0.0:
+    resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==}
 
   json-stringify-safe@5.0.1:
     resolution: {integrity: sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==}
@@ -2693,6 +2710,10 @@ packages:
 
   readonly-date@1.0.0:
     resolution: {integrity: sha512-tMKIV7hlk0h4mO3JTmmVuIlJVXjKk3Sep9Bf5OH0O+758ruuVkUy2J9SttDLm91IEX/WHlXPSpxMGjPj4beMIQ==}
+
+  require-from-string@2.0.2:
+    resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
+    engines: {node: '>=0.10.0'}
 
   resolve-alpn@1.2.1:
     resolution: {integrity: sha512-0a1F4l73/ZFZOakJnQ3FvkJ2+gSTQWz/r2KE5OdDY0TxPm5h4GkqkWWfM47T7HsbnOtcJVEF4epCVy6u7Q3K+g==}
@@ -3543,6 +3564,22 @@ snapshots:
       - debug
       - utf-8-validate
 
+  '@cosmjs/cosmwasm-stargate@0.37.0(bufferutil@4.1.0)(utf-8-validate@5.0.10)':
+    dependencies:
+      '@cosmjs/amino': 0.37.1
+      '@cosmjs/crypto': 0.37.1
+      '@cosmjs/encoding': 0.37.1
+      '@cosmjs/math': 0.37.1
+      '@cosmjs/proto-signing': 0.37.1
+      '@cosmjs/stargate': 0.37.0(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+      '@cosmjs/tendermint-rpc': 0.37.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+      '@cosmjs/utils': 0.37.1
+      cosmjs-types: 0.10.1
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    optional: true
+
   '@cosmjs/crypto@0.32.4':
     dependencies:
       '@cosmjs/encoding': 0.32.4
@@ -3797,15 +3834,17 @@ snapshots:
   '@cosmjs/utils@0.37.1':
     optional: true
 
-  '@defuse-protocol/contract-types@0.1.2': {}
-
-  '@defuse-protocol/contract-types@0.4.3': {}
-
-  '@defuse-protocol/intents-sdk@0.43.3(d02421ee0230378d92c629cbdeade5e1)':
+  '@defuse-protocol/contract-types@0.6.0':
     dependencies:
-      '@defuse-protocol/contract-types': 0.4.3
-      '@defuse-protocol/internal-utils': 0.21.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
-      '@hot-labs/omni-sdk': 2.24.3(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10)
+      '@standard-schema/spec': 1.1.0
+      ajv: 8.17.1
+      ajv-formats: 3.0.1(ajv@8.17.1)
+
+  '@defuse-protocol/intents-sdk@0.49.0(d02421ee0230378d92c629cbdeade5e1)':
+    dependencies:
+      '@defuse-protocol/contract-types': 0.6.0
+      '@defuse-protocol/internal-utils': 0.26.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
+      '@hot-labs/omni-sdk': 2.24.7(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@isaacs/ttlcache': 1.4.1
       '@lifeomic/attempt': 3.1.0
       '@near-js/accounts': 2.5.1(aa211f6842ae8a1a94a4a8d5025a4b2f)
@@ -3842,29 +3881,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@defuse-protocol/internal-utils@0.15.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)':
+  '@defuse-protocol/internal-utils@0.26.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)':
     dependencies:
-      '@defuse-protocol/contract-types': 0.1.2
-      '@lifeomic/attempt': 3.1.0
-      '@noble/hashes': 1.8.0
-      '@peculiar/asn1-ecc': 2.6.0
-      '@peculiar/asn1-schema': 2.6.0
-      '@scure/base': 1.2.6
-      '@thames/monads': 0.7.0
-      near-api-js: 5.1.1
-      tweetnacl: 1.0.3
-      valibot: 1.2.0(typescript@5.9.3)
-      viem: 2.43.5(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - typescript
-      - utf-8-validate
-      - zod
-
-  '@defuse-protocol/internal-utils@0.21.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)':
-    dependencies:
-      '@defuse-protocol/contract-types': 0.4.3
+      '@defuse-protocol/contract-types': 0.6.0
       '@lifeomic/attempt': 3.1.0
       '@noble/hashes': 1.8.0
       '@peculiar/asn1-ecc': 2.6.0
@@ -4017,7 +4036,7 @@ snapshots:
     dependencies:
       graphql: 16.12.0
 
-  '@hot-labs/omni-sdk@2.24.3(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10)':
+  '@hot-labs/omni-sdk@2.24.7(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@near-js/crypto': 2.2.5(@near-js/types@2.2.5)(@near-js/utils@2.2.5(@near-js/types@2.2.5))
       '@near-js/providers': 2.2.5(@near-js/crypto@2.2.5(@near-js/types@2.2.5)(@near-js/utils@2.2.5(@near-js/types@2.2.5)))(@near-js/transactions@2.2.5(@near-js/crypto@2.2.5(@near-js/types@2.2.5)(@near-js/utils@2.2.5(@near-js/types@2.2.5)))(@near-js/types@2.2.5)(@near-js/utils@2.2.5(@near-js/types@2.2.5)))(@near-js/types@2.2.5)(@near-js/utils@2.2.5(@near-js/types@2.2.5))
@@ -4035,6 +4054,7 @@ snapshots:
       rlp: 3.0.0
     optionalDependencies:
       '@coral-xyz/anchor': 0.29.0(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
+      '@cosmjs/cosmwasm-stargate': 0.37.0(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@cosmjs/stargate': 0.37.0(bufferutil@4.1.0)(utf-8-validate@5.0.10)
       '@solana/spl-token': 0.4.13(@solana/web3.js@1.68.0(bufferutil@4.1.0)(utf-8-validate@5.0.10))(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.68.0(bufferutil@4.1.0)(utf-8-validate@5.0.10)
@@ -5566,6 +5586,17 @@ snapshots:
     dependencies:
       humanize-ms: 1.2.1
 
+  ajv-formats@3.0.1(ajv@8.17.1):
+    optionalDependencies:
+      ajv: 8.17.1
+
+  ajv@8.17.1:
+    dependencies:
+      fast-deep-equal: 3.1.3
+      fast-uri: 3.1.0
+      json-schema-traverse: 1.0.0
+      require-from-string: 2.0.2
+
   algo-msgpack-with-bigint@2.1.1: {}
 
   algosdk@2.7.0:
@@ -5974,6 +6005,8 @@ snapshots:
 
   eyes@0.1.8: {}
 
+  fast-deep-equal@3.1.3: {}
+
   fast-glob@3.3.3:
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -5983,6 +6016,8 @@ snapshots:
       micromatch: 4.0.8
 
   fast-stable-stringify@1.0.0: {}
+
+  fast-uri@3.1.0: {}
 
   fastestsmallesttextencoderdecoder@1.0.22: {}
 
@@ -6315,6 +6350,8 @@ snapshots:
     dependencies:
       bignumber.js: 9.3.1
 
+  json-schema-traverse@1.0.0: {}
+
   json-stringify-safe@5.0.1: {}
 
   jsonfile@4.0.0:
@@ -6636,6 +6673,8 @@ snapshots:
   readdirp@5.0.0: {}
 
   readonly-date@1.0.0: {}
+
+  require-from-string@2.0.2: {}
 
   resolve-alpn@1.2.1: {}
 

@@ -1,4 +1,4 @@
-import { authIdentity } from "@defuse-protocol/internal-utils";
+import { AuthMethod, authIdentity } from "@defuse-protocol/internal-utils";
 import {
 	QuoteRequest,
 	type QuoteResponse,
@@ -8,13 +8,21 @@ import { formatUnits, parseUnits } from "viem";
 import type { KeyPairString } from "@/types/near";
 import { batchBalanceOf } from "../balance/batch";
 import { getOneClickQuote, submitOneClickQuote } from "../oneclick/index";
-import { getSupportedTokens } from "../tokens/service";
+import { getSupportedTokens } from "../tokens";
 import type {
 	WithdrawQuoteResultInternal,
 	WithdrawSubmitResponse,
 } from "./schema";
 
-const AUTH_METHOD = "near";
+function getQuoteExpiresAt(quote: QuoteResponse): number {
+	const parsedDeadline = quote.quote.deadline
+		? Date.parse(quote.quote.deadline)
+		: Number.NaN;
+	if (Number.isFinite(parsedDeadline)) {
+		return parsedDeadline;
+	}
+	return Date.now() + 20 * 60 * 1000;
+}
 
 export async function getWithdrawQuote({
 	walletAddress,
@@ -31,7 +39,7 @@ export async function getWithdrawQuote({
 }): Promise<WithdrawQuoteResultInternal> {
 	const accountId = authIdentity.authHandleToIntentsUserId(
 		walletAddress,
-		AUTH_METHOD,
+		AuthMethod.Near,
 	);
 
 	const balances = await batchBalanceOf({
@@ -49,7 +57,9 @@ export async function getWithdrawQuote({
 
 		return {
 			status: "error" as const,
-			message: `Insufficient balance. Available: ${balanceFormatted} ${token?.symbol || assetId}`,
+			message: `Insufficient balance. Available: ${balanceFormatted} ${
+				token?.symbol || assetId
+			}`,
 		};
 	}
 
@@ -67,6 +77,7 @@ export async function getWithdrawQuote({
 
 	return {
 		status: "success" as const,
+		quoteId: quote.correlationId,
 		quote,
 		assetId,
 		amount: amountInBaseUnits.toString(),
@@ -79,6 +90,7 @@ export async function getWithdrawQuote({
 		),
 		transferFee: transferFee.toString(),
 		transferFeeFormatted: formatUnits(transferFee, decimals),
+		expiresAt: getQuoteExpiresAt(quote),
 	};
 }
 

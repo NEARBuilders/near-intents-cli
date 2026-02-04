@@ -4,7 +4,7 @@ import {
 	getToken,
 	getTokensByBlockchain,
 	searchTokens,
-} from "@/services/tokens/service";
+} from "@/services/tokens";
 
 describe("tokens service", () => {
 	describe("getSupportedTokens", () => {

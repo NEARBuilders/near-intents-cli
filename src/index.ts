@@ -26,11 +26,11 @@ export type { BalanceResponse, TokenBalance } from "./services/balance/schema";
 // ============================================================================
 // Deposit
 // ============================================================================
-export { getDepositAddress } from "./services/deposit/index";
 export type {
 	DepositAddressRequest,
 	DepositAddressResponse,
 } from "./services/deposit/schema";
+export { getDepositAddress } from "./services/deposit/service";
 // ============================================================================
 // NEAR Utilities
 // ============================================================================

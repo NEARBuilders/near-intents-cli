@@ -2,7 +2,7 @@ import { KeyPair } from "near-api-js";
 import { describe, expect, it } from "vitest";
 import { getDepositAddress } from "@/services/deposit";
 import { getNearAddressFromKeyPair } from "@/services/near-intents/wallet";
-import { getSupportedTokens } from "@/services/tokens/service";
+import { getSupportedTokens } from "@/services/tokens";
 import { getTestPrivateKey, hasPrivateKey } from "../setup";
 
 describe.skipIf(!hasPrivateKey())("deposit service", () => {

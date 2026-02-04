@@ -8,10 +8,8 @@
 		"strictNullChecks": true,
 		"noImplicitAny": false,
 		"types": ["node"],
-		"jsx": "preserve",
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
-		"jsxImportSource": "hono/jsx",
 		"declaration": false,
 		"declarationMap": false,
 		"paths": {

@@ -55,6 +55,7 @@ export const withdrawSubmitResponseSchema = z.discriminatedUnion("status", [
 // Internal types for service layer (includes quote for caching)
 export interface WithdrawQuoteSuccessInternal {
 	status: "success";
+	quoteId: string;
 	quote: QuoteResponse;
 	assetId: string;
 	amount: string;
@@ -64,6 +65,7 @@ export interface WithdrawQuoteSuccessInternal {
 	receivedAmountFormatted: string;
 	transferFee: string;
 	transferFeeFormatted: string;
+	expiresAt: number;
 }
 
 export interface WithdrawQuoteErrorInternal {

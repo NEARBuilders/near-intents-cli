@@ -8,10 +8,8 @@ export const depositAddressRequestSchema = z.object({
 // Response schemas
 export const depositAddressResponseSchema = z.object({
 	address: z.string(),
-	chain: z.string().optional(),
-	network: z.string().optional(),
-	minDepositAmount: z.string().optional(),
-	minDepositAmountFormatted: z.string().optional(),
+	chain: z.string(),
+	memo: z.string().nullable(),
 });
 
 export const errorResponseSchema = z.object({

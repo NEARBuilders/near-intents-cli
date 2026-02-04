@@ -1,5 +1,5 @@
 import { type Config, hasApiKey } from "../config";
-import { executeSwapQuote, getSwapQuote } from "../services/swap/service";
+import { executeSwapQuote, getSwapQuote } from "../services/swap";
 import { resolveToken } from "../utils/token";
 
 function showFeeNotice() {

@@ -1,8 +1,5 @@
 import { type Config, hasApiKey } from "../config";
-import {
-	executeWithdrawQuote,
-	getWithdrawQuote,
-} from "../services/withdraw/service";
+import { executeWithdrawQuote, getWithdrawQuote } from "../services/withdraw";
 import { resolveToken } from "../utils/token";
 
 function showFeeNotice() {
