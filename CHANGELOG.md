@@ -4,6 +4,12 @@
 
 ### Minor Changes
 
+- 9d1463a: Add Transfer Operations between two near-intents addresses
+
+## 0.2.0
+
+### Minor Changes
+
 - 820d6d4: Improve command error handling and type safety across the CLI
 
 ### Patch Changes
