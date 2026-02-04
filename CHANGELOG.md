@@ -1,5 +1,11 @@
 # near-intents-cli
 
+## 0.3.1
+
+### Patch Changes
+
+- c586187: refactor: modularize services with dedicated index and service files
+
 ## 0.3.0
 
 ### Minor Changes
