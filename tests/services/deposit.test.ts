@@ -1,15 +1,11 @@
-import { KeyPair } from "near-api-js";
 import { describe, expect, it } from "vitest";
 import { getDepositAddress } from "@/services/deposit";
-import { getNearAddressFromKeyPair } from "@/services/near-intents/wallet";
 import { getSupportedTokens } from "@/services/tokens";
-import { getTestPrivateKey, hasPrivateKey } from "../setup";
+import { getSandboxCredentials } from "../setup";
 
-describe.skipIf(!hasPrivateKey())("deposit service", () => {
+describe("deposit service", () => {
 	function getWalletAddress(): string {
-		const privateKey = getTestPrivateKey();
-		const keyPair = KeyPair.fromString(privateKey);
-		return getNearAddressFromKeyPair(keyPair);
+		return getSandboxCredentials().walletAddress;
 	}
 
 	describe("getDepositAddress", () => {

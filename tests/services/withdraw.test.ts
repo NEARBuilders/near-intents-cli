@@ -1,16 +1,39 @@
-import { KeyPair } from "near-api-js";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("@defuse-protocol/one-click-sdk-typescript", async (importOriginal) => {
+	const actual = await importOriginal<
+		typeof import("@defuse-protocol/one-click-sdk-typescript")
+	>();
+	return {
+		...actual,
+		OneClickService: {
+			...actual.OneClickService,
+			getQuote: vi.fn().mockResolvedValue({
+				correlationId: "mock-correlation-id",
+				quote: {
+					amountIn: "50000000",
+					amountOut: "49500000",
+					deadline: new Date(Date.now() + 20 * 60 * 1000).toISOString(),
+					depositAddress: "mock-deposit-address",
+				},
+				quoteRequest: {
+					amount: "50000000",
+					originAsset: "nep141:usdc.near",
+					destinationAsset: "nep141:usdc.near",
+				},
+			}),
+		},
+	};
+});
+
 import { getWithdrawQuote } from "@/index";
 import { getTokenBalances } from "@/services/balance/balances";
-import { getNearAddressFromKeyPair } from "@/services/near-intents/wallet";
 import { getSupportedTokens } from "@/services/tokens";
-import { getTestPrivateKey, hasPrivateKey } from "../setup";
+import { getSandboxCredentials } from "../setup";
 
-describe.skipIf(!hasPrivateKey())("withdraw service", () => {
+describe("withdraw service", () => {
 	function getWalletAddress(): string {
-		const privateKey = getTestPrivateKey();
-		const keyPair = KeyPair.fromString(privateKey);
-		return getNearAddressFromKeyPair(keyPair);
+		return getSandboxCredentials().walletAddress;
 	}
 
 	describe("getWithdrawQuote", () => {

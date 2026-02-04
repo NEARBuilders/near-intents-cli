@@ -1,18 +1,12 @@
-import { KeyPair } from "near-api-js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { balancesCommand } from "@/commands/balances";
-import { getNearAddressFromKeyPair } from "@/services/near-intents/wallet";
-import type { KeyPairString } from "@/types/near";
-import { getTestPrivateKey, hasPrivateKey } from "../setup";
+import { getSandboxCredentials } from "../setup";
 
-describe.skipIf(!hasPrivateKey())("balances command", () => {
+describe("balances command", () => {
 	let consoleSpy: ReturnType<typeof vi.spyOn>;
 
 	function getConfig() {
-		const privateKey = getTestPrivateKey();
-		const keyPair = KeyPair.fromString(privateKey);
-		const walletAddress = getNearAddressFromKeyPair(keyPair);
-		return { privateKey: privateKey as KeyPairString, walletAddress };
+		return getSandboxCredentials();
 	}
 
 	beforeEach(() => {
