@@ -2,15 +2,13 @@ import {
 	createInternalTransferRoute,
 	RouteEnum,
 } from "@defuse-protocol/intents-sdk";
-import { authIdentity } from "@defuse-protocol/internal-utils";
+import { AuthMethod, authIdentity } from "@defuse-protocol/internal-utils";
 import { formatUnits, parseUnits } from "viem";
 import type { KeyPairString } from "@/types/near";
 import { batchBalanceOf } from "../balance/batch";
 import { getNearIntentsSDK } from "../near-intents/sdk";
-import { getSupportedTokens } from "../tokens/service";
+import { getSupportedTokens } from "../tokens";
 import type { TransferQuoteResult, TransferSubmitResponse } from "./schema";
-
-const AUTH_METHOD = "near";
 
 export async function getTransferQuote({
 	walletAddress,
@@ -27,7 +25,7 @@ export async function getTransferQuote({
 }): Promise<TransferQuoteResult> {
 	const accountId = authIdentity.authHandleToIntentsUserId(
 		walletAddress,
-		AUTH_METHOD,
+		AuthMethod.Near,
 	);
 
 	const balances = await batchBalanceOf({

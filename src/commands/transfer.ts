@@ -1,8 +1,5 @@
 import type { Config } from "../config";
-import {
-	executeTransfer,
-	getTransferQuote,
-} from "../services/transfer/service";
+import { executeTransfer, getTransferQuote } from "../services/transfer";
 import { resolveToken } from "../utils/token";
 
 export async function transferCommand(

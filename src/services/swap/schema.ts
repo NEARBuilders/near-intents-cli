@@ -55,6 +55,7 @@ export const swapExecuteResponseSchema = z.discriminatedUnion("status", [
 // Internal types for service layer (includes quote for caching)
 export interface SwapQuoteSuccessInternal {
 	status: "success";
+	quoteId: string;
 	quote: QuoteResponse;
 	fromTokenId: string;
 	toTokenId: string;
@@ -63,6 +64,7 @@ export interface SwapQuoteSuccessInternal {
 	amountOut: string;
 	amountOutFormatted: string;
 	exchangeRate: string;
+	expiresAt: number;
 }
 
 export interface SwapQuoteErrorInternal {

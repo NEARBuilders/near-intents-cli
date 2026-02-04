@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { swapCommand } from "@/commands/swap";
 import { getTokenBalances } from "@/services/balance/balances";
 import { getNearAddressFromKeyPair } from "@/services/near-intents/wallet";
-import { getSupportedTokens } from "@/services/tokens/service";
+import { getSupportedTokens } from "@/services/tokens";
 import type { KeyPairString } from "@/types/near";
 import { getTestPrivateKey, hasPrivateKey } from "../setup";
 

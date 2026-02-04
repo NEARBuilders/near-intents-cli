@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { getWithdrawQuote } from "@/index";
 import { getTokenBalances } from "@/services/balance/balances";
 import { getNearAddressFromKeyPair } from "@/services/near-intents/wallet";
-import { getSupportedTokens } from "@/services/tokens/service";
+import { getSupportedTokens } from "@/services/tokens";
 import { getTestPrivateKey, hasPrivateKey } from "../setup";
 
 describe.skipIf(!hasPrivateKey())("withdraw service", () => {

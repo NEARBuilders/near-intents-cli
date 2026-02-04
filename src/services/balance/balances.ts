@@ -1,10 +1,8 @@
-import { authIdentity } from "@defuse-protocol/internal-utils";
+import { AuthMethod, authIdentity } from "@defuse-protocol/internal-utils";
 import { formatUnits } from "viem";
-import { getSupportedTokens } from "../tokens/service";
+import { getSupportedTokens } from "../tokens";
 import { batchBalanceOf } from "./batch";
 import type { TokenBalance } from "./schema";
-
-const AUTH_METHOD = "near";
 
 export async function getTokenBalances({
 	walletAddress,
@@ -14,7 +12,7 @@ export async function getTokenBalances({
 	try {
 		const accountId = authIdentity.authHandleToIntentsUserId(
 			walletAddress,
-			AUTH_METHOD,
+			AuthMethod.Near,
 		);
 		const supportedTokens = await getSupportedTokens();
 
@@ -38,6 +36,7 @@ export async function getTokenBalances({
 					amounts[token.intentsTokenId],
 					token.decimals,
 				),
+				logoURI: null,
 			}))
 			.filter((token) => token.balance !== "0");
 

@@ -1,4 +1,4 @@
-import { getSupportedTokens, searchTokens } from "../services/tokens/service";
+import { getSupportedTokens, searchTokens } from "../services/tokens";
 import { formatTable } from "../utils/token";
 
 export async function tokensCommand(flags: Record<string, string>) {
