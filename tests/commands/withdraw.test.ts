@@ -1,20 +1,41 @@
-import { KeyPair } from "near-api-js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("@defuse-protocol/one-click-sdk-typescript", async (importOriginal) => {
+	const actual = await importOriginal<
+		typeof import("@defuse-protocol/one-click-sdk-typescript")
+	>();
+	return {
+		...actual,
+		OneClickService: {
+			...actual.OneClickService,
+			getQuote: vi.fn().mockResolvedValue({
+				correlationId: "mock-correlation-id",
+				quote: {
+					amountIn: "50000000",
+					amountOut: "49500000",
+					deadline: new Date(Date.now() + 20 * 60 * 1000).toISOString(),
+					depositAddress: "mock-deposit-address",
+				},
+				quoteRequest: {
+					amount: "50000000",
+					originAsset: "nep141:usdc.near",
+					destinationAsset: "nep141:usdc.near",
+				},
+			}),
+		},
+	};
+});
+
 import { withdrawCommand } from "@/commands/withdraw";
 import { getTokenBalances } from "@/services/balance/balances";
-import { getNearAddressFromKeyPair } from "@/services/near-intents/wallet";
 import { getSupportedTokens } from "@/services/tokens";
-import type { KeyPairString } from "@/types/near";
-import { getTestPrivateKey, hasPrivateKey } from "../setup";
+import { getSandboxCredentials } from "../setup";
 
-describe.skipIf(!hasPrivateKey())("withdraw command", () => {
+describe("withdraw command", () => {
 	let consoleSpy: ReturnType<typeof vi.spyOn>;
 
 	function getConfig() {
-		const privateKey = getTestPrivateKey();
-		const keyPair = KeyPair.fromString(privateKey);
-		const walletAddress = getNearAddressFromKeyPair(keyPair);
-		return { privateKey: privateKey as KeyPairString, walletAddress };
+		return getSandboxCredentials();
 	}
 
 	beforeEach(() => {
