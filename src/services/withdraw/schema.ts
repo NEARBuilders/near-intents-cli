@@ -15,6 +15,7 @@ export const withdrawSubmitRequestSchema = z.object({
 const withdrawQuoteSuccessSchema = z.object({
 	status: z.literal("success"),
 	quoteId: z.string(),
+	quote: z.custom<QuoteResponse>((data): data is QuoteResponse => true),
 	assetId: z.string(),
 	amount: z.string(),
 	amountFormatted: z.string(),
@@ -51,6 +52,15 @@ export const withdrawSubmitResponseSchema = z.discriminatedUnion("status", [
 	withdrawSubmitSuccessSchema,
 	withdrawSubmitErrorSchema,
 ]);
+
+// Input schema for execute endpoint
+export const withdrawExecuteRequestSchema = z.object({
+	walletAddress: z.string(),
+	quote: z.custom<QuoteResponse>((data): data is QuoteResponse => true),
+});
+export type WithdrawExecuteRequest = z.infer<
+	typeof withdrawExecuteRequestSchema
+>;
 
 // Internal types for service layer (includes quote for caching)
 export interface WithdrawQuoteSuccessInternal {

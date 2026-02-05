@@ -1,13 +1,32 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@defuse-protocol/one-click-sdk-typescript", async (importOriginal) => {
-	const actual = await importOriginal<
-		typeof import("@defuse-protocol/one-click-sdk-typescript")
-	>();
+	const actual =
+		await importOriginal<
+			typeof import("@defuse-protocol/one-click-sdk-typescript")
+		>();
 	return {
 		...actual,
 		OneClickService: {
 			...actual.OneClickService,
+			getTokens: vi.fn().mockResolvedValue([
+				{
+					assetId: "nep141:usdc.near",
+					blockchain: "near",
+					symbol: "USDC",
+					decimals: 6,
+					price: 1,
+					priceUpdatedAt: new Date().toISOString(),
+				},
+				{
+					assetId: "nep141:wrap.near",
+					blockchain: "near",
+					symbol: "NEAR",
+					decimals: 24,
+					price: 6.5,
+					priceUpdatedAt: new Date().toISOString(),
+				},
+			]),
 			getQuote: vi.fn().mockResolvedValue({
 				correlationId: "mock-correlation-id",
 				quote: {
