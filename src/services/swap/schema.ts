@@ -9,13 +9,15 @@ export const swapQuoteRequestSchema = z.object({
 });
 
 export const swapExecuteRequestSchema = z.object({
-	quoteId: z.string().min(1, "Quote ID is required"),
+	walletAddress: z.string(),
+	quote: z.custom<QuoteResponse>((data): data is QuoteResponse => true),
 });
 
 // Response schemas with discriminated unions
 const swapQuoteSuccessSchema = z.object({
 	status: z.literal("success"),
 	quoteId: z.string(),
+	quote: z.custom<QuoteResponse>((data): data is QuoteResponse => true),
 	fromTokenId: z.string(),
 	toTokenId: z.string(),
 	amountIn: z.string(),

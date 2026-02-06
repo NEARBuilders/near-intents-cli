@@ -1,25 +1,44 @@
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@defuse-protocol/one-click-sdk-typescript", async (importOriginal) => {
-	const actual = await importOriginal<
-		typeof import("@defuse-protocol/one-click-sdk-typescript")
-	>();
+	const actual =
+		await importOriginal<
+			typeof import("@defuse-protocol/one-click-sdk-typescript")
+		>();
 	return {
 		...actual,
 		OneClickService: {
 			...actual.OneClickService,
+			getTokens: vi.fn().mockResolvedValue([
+				{
+					assetId: "nep141:usdc.near",
+					blockchain: "near",
+					symbol: "USDC",
+					decimals: 6,
+					price: 1,
+					priceUpdatedAt: new Date().toISOString(),
+				},
+				{
+					assetId: "nep141:wrap.near",
+					blockchain: "near",
+					symbol: "NEAR",
+					decimals: 24,
+					price: 6.5,
+					priceUpdatedAt: new Date().toISOString(),
+				},
+			]),
 			getQuote: vi.fn().mockResolvedValue({
 				correlationId: "mock-correlation-id",
 				quote: {
-					amountIn: "1000000",
-					amountOut: "980000",
+					amountIn: "50000000",
+					amountOut: "49500000",
 					deadline: new Date(Date.now() + 20 * 60 * 1000).toISOString(),
 					depositAddress: "mock-deposit-address",
 				},
 				quoteRequest: {
-					amount: "1000000",
+					amount: "50000000",
 					originAsset: "nep141:usdc.near",
-					destinationAsset: "nep141:wrap.near",
+					destinationAsset: "nep141:usdc.near",
 				},
 			}),
 		},

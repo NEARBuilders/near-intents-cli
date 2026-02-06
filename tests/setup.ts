@@ -11,11 +11,11 @@ const TEST_CONFIG_DIR = path.join(
 );
 
 let sandbox: Sandbox;
-let near: Near;
+let _near: Near;
 
 beforeAll(async () => {
 	sandbox = await Sandbox.start();
-	near = new Near({ network: sandbox });
+	_near = new Near({ network: sandbox });
 
 	process.env.NEAR_INTENTS_CONFIG_DIR = TEST_CONFIG_DIR;
 	if (!fs.existsSync(TEST_CONFIG_DIR)) {

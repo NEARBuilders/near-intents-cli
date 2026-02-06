@@ -64,3 +64,13 @@ export type TransferQuoteResponse = z.infer<typeof transferQuoteResponseSchema>;
 export type TransferSubmitResponse = z.infer<
 	typeof transferSubmitResponseSchema
 >;
+
+// Execute input/output types for contract
+export const transferExecuteRequestSchema = z.object({
+	tokenId: z.string(),
+	amount: z.string(),
+	toAddress: z.string(),
+});
+export type TransferExecuteRequest = z.infer<
+	typeof transferExecuteRequestSchema
+>;

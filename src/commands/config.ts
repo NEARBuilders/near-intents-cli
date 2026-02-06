@@ -7,6 +7,7 @@ import {
 	writeStoredConfig,
 } from "../config";
 import { getNearAddressFromKeyPair } from "../services/near-intents/wallet";
+import { styles } from "../utils/styles";
 
 export async function configCommand(flags: Record<string, string>) {
 	const subcommand = flags._subcommand;
@@ -39,12 +40,16 @@ Config file: ${getConfigPath()}`);
 function configSet(key: string | undefined, value: string | undefined) {
 	if (!key) {
 		console.error(
-			"Error: Missing key. Usage: config set <api-key|private-key> <value>",
+			styles.error(
+				"Missing key. Usage: config set <api-key|private-key> <value>",
+			),
 		);
 		process.exit(1);
 	}
 	if (!value) {
-		console.error(`Error: Missing value. Usage: config set ${key} <value>`);
+		console.error(
+			styles.error(`Missing value. Usage: config set ${key} <value>`),
+		);
 		process.exit(1);
 	}
 
@@ -54,16 +59,16 @@ function configSet(key: string | undefined, value: string | undefined) {
 		case "api-key":
 			config.apiKey = value;
 			writeStoredConfig(config);
-			console.log(`API key saved to ${getConfigPath()}`);
+			console.log(styles.success(`API key saved to ${getConfigPath()}`));
 			break;
 		case "private-key":
 			config.privateKey = value;
 			writeStoredConfig(config);
-			console.log(`Private key saved to ${getConfigPath()}`);
+			console.log(styles.success(`Private key saved to ${getConfigPath()}`));
 			break;
 		default:
-			console.error(`Unknown config key: ${key}`);
-			console.error("Valid keys: api-key, private-key");
+			console.error(styles.error(`Unknown config key: ${key}`));
+			console.error(styles.dim("Valid keys: api-key, private-key"));
 			process.exit(1);
 	}
 }
@@ -73,44 +78,46 @@ function configGet() {
 	const configPath = getConfigPath();
 
 	if (!config.apiKey && !config.privateKey) {
-		console.log(`No config found at ${configPath}`);
+		console.log(styles.warning(`No config found at ${configPath}`));
 		console.log("\nTo get started:");
-		console.log("  near-intents-cli config generate-key");
-		console.log("  near-intents-cli config set api-key <key>");
+		console.log(styles.cyan("  near-intents-cli config generate-key"));
+		console.log(styles.cyan("  near-intents-cli config set api-key <key>"));
 		return;
 	}
 
-	console.log(`Config file: ${configPath}\n`);
+	console.log(`${styles.dim(`Config file: ${configPath}`)}\n`);
 
 	if (config.apiKey) {
 		const masked = `${config.apiKey.slice(0, 8)}...${config.apiKey.slice(-4)}`;
-		console.log(`API key: ${masked}`);
+		console.log(styles.keyValuePair("API key", masked));
 	} else {
-		console.log("API key: (not set)");
+		console.log(styles.keyValuePair("API key", styles.dim("(not set)")));
 	}
 
 	if (config.privateKey) {
 		const prefix = config.privateKey.split(":")[0];
 		const keyPair = KeyPair.fromString(config.privateKey as KeyPairString);
 		const address = getNearAddressFromKeyPair(keyPair);
-		console.log(`Private key: ${prefix}:****`);
-		console.log(`Wallet address: ${address}`);
+		console.log(styles.keyValuePair("Private key", `${prefix}:****`));
+		console.log(styles.keyValuePair("Wallet address", address));
 	} else {
-		console.log("Private key: (not set)");
+		console.log(styles.keyValuePair("Private key", styles.dim("(not set)")));
 	}
 }
 
 function configClear() {
 	clearStoredConfig();
-	console.log(`Config cleared: ${getConfigPath()}`);
+	console.log(styles.success(`Config cleared: ${getConfigPath()}`));
 }
 
 function configGenerateKey() {
 	const config = readStoredConfig();
 
 	if (config.privateKey) {
-		console.error("Error: Private key already exists in config.");
-		console.error("Run 'near-intents-cli config clear' first to remove it.");
+		console.error(styles.error("Private key already exists in config."));
+		console.error(
+			styles.dim("Run 'near-intents-cli config clear' first to remove it."),
+		);
 		process.exit(1);
 	}
 
@@ -121,8 +128,12 @@ function configGenerateKey() {
 	config.privateKey = privateKey;
 	writeStoredConfig(config);
 
-	console.log(`New key pair generated and saved to ${getConfigPath()}\n`);
-	console.log(`Wallet address: ${address}`);
-	console.log(`\nTo fund this wallet, deposit tokens using:`);
-	console.log(`  near-intents-cli deposit --token USDC --blockchain eth`);
+	console.log(
+		styles.success(`New key pair generated and saved to ${getConfigPath()}`),
+	);
+	console.log(styles.keyValuePair("Wallet address", address));
+	console.log(`\n${styles.dim("To fund this wallet, deposit tokens using:")}`);
+	console.log(
+		styles.cyan("  near-intents-cli deposit --token USDC --blockchain eth"),
+	);
 }

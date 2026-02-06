@@ -14,7 +14,7 @@
 		"declarationMap": false,
 		"paths": {
 			"@/*": ["./src/*"]
-		},
+		}
 	},
 	"include": ["src/**/*", "tests/**/*"]
 }
