@@ -1,5 +1,12 @@
 import { type Config, hasApiKey } from "../config";
+import { getTokenBalances } from "../services/balance/balances";
 import { executeWithdrawQuote, getWithdrawQuote } from "../services/withdraw";
+import {
+	resolveAddressWithOptionalPrompt,
+	resolveAmountWithOptionalPrompt,
+	resolveTokenWithOptionalPrompt,
+	shouldUseInteractive,
+} from "../utils/interactive";
 import { resolveToken } from "../utils/token";
 
 function showFeeNotice() {
@@ -16,19 +23,41 @@ export async function withdrawCommand(
 	config: Config,
 	flags: Record<string, string>,
 ) {
-	const toAddress = flags.to;
-	const amount = flags.amount;
-	const symbol = flags.token;
-	const blockchain = flags.blockchain;
 	const dryRun = flags["dry-run"] === "true";
+	const interactive = shouldUseInteractive(flags, ["to", "amount", "token"]);
+	const balanceTokenIds = await getBalanceTokenIds(config.walletAddress);
 
-	if (!toAddress) throw new Error("--to is required");
-	if (!amount) throw new Error("--amount is required");
-	if (!symbol) throw new Error("--token is required");
+	const toAddress = await resolveAddressWithOptionalPrompt({
+		address: flags.to,
+		interactive,
+		requiredErrorMessage: "--to is required",
+		promptMessage: "Enter destination address",
+	});
+	const amount = await resolveAmountWithOptionalPrompt({
+		amount: flags.amount,
+		interactive,
+		requiredErrorMessage: "--amount is required",
+		promptMessage: "Enter amount to withdraw",
+	});
+	const token = interactive
+		? await resolveTokenWithOptionalPrompt({
+				symbol: flags.token,
+				blockchain: flags.blockchain,
+				flagName: "--blockchain",
+				requiredErrorMessage: "--token is required",
+				interactive,
+				promptMessage: "Select token to withdraw",
+				allowedTokenIds: balanceTokenIds,
+			})
+		: await resolveTokenOrThrow(flags);
 
 	showFeeNotice();
 
-	const token = await resolveToken(symbol, blockchain, "--blockchain");
+	if (!balanceTokenIds.has(token.intentsTokenId)) {
+		throw new Error(
+			`Insufficient balance for ${token.symbol} (${token.blockchain})`,
+		);
+	}
 
 	console.log(`Getting withdrawal quote...`);
 	console.log(`Token: ${token.symbol} (${token.blockchain})`);
@@ -74,4 +103,21 @@ export async function withdrawCommand(
 	} else {
 		console.log(`Error: ${result.message}`);
 	}
+}
+
+async function resolveTokenOrThrow(flags: Record<string, string>) {
+	const symbol = flags.token;
+	const blockchain = flags.blockchain;
+
+	if (!symbol) throw new Error("--token is required");
+
+	return resolveToken(symbol, blockchain, "--blockchain");
+}
+
+async function getBalanceTokenIds(walletAddress: string): Promise<Set<string>> {
+	const balances = await getTokenBalances({ walletAddress });
+	if (balances.length === 0) {
+		throw new Error("No token balances found. Deposit funds before withdrawing.");
+	}
+	return new Set(balances.map((token) => token.intentsTokenId));
 }

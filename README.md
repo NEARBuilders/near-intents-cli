@@ -58,6 +58,34 @@ near-intents-cli tokens --search USDC
 near-intents-cli balances
 ```
 
+Interactive input is available for `deposit`, `swap`, `transfer`, and `withdraw`:
+- In TTY terminals, missing required flags open arrow-key prompts automatically.
+- Use `--interactive` to force the prompt flow.
+- In non-TTY mode (scripts/automation), missing required flags still return errors.
+
+### Human and Agent Modes
+
+- `--human` starts a persistent terminal mini app and saves `preferredMode=human`.
+- `--agent` forces strict one-shot command behavior for scripts and AI automation, and saves `preferredMode=agent`.
+- `--human` and `--agent` cannot be used together.
+- When you run `near-intents-cli` with no command, startup mode uses saved `preferredMode`.
+- If no `preferredMode` is saved yet, default behavior is agent mode (show help and wait for explicit command).
+- If `preferredMode=human` and you pass a command (for example `near-intents-cli balances`), the explicit command still runs one-shot.
+
+Examples:
+
+```bash
+# Persistent mini app for humans
+near-intents-cli --human
+
+# Next time, no command opens human mode from saved preference
+near-intents-cli
+
+# Deterministic one-shot mode for agents/scripts
+near-intents-cli --agent balances
+near-intents-cli --agent swap --from USDC --to NEAR --amount 10 --dry-run
+```
+
 ## Quick Start
 
 All examples below use `near-intents-cli` assuming you've installed the CLI globally. If you haven't installed it, prefix commands with your package runner:
@@ -73,15 +101,15 @@ bunx near-intents-cli <command>
 npx near-intents-cli <command>
 ```
 
-### 1. Generate a NEAR Key Pair
+### 1. Generate a Wallet
 
-If you don't have a NEAR account, generate a new key pair:
+If you don't have a wallet yet, generate one:
 
 ```bash
-near-intents-cli config generate-key
+near-intents-cli config generate-wallet
 ```
 
-This creates a new ed25519 key pair and saves it to `~/.near-intents/config.json`. The wallet address will be displayed for you to fund.
+This creates a new ed25519 key pair and saves it to `~/.near-intents/config.json`. The wallet address will be displayed so you can fund it.
 
 ### 2. Get an API Key (Optional)
 
@@ -153,12 +181,14 @@ Get a deposit address to fund your wallet from external chains.
 ```bash
 near-intents-cli deposit --token <symbol>
 near-intents-cli deposit --token USDC --blockchain eth
+near-intents-cli deposit --interactive
 ```
 
 Options:
 
 - `--token <symbol>` - Token symbol (required)
 - `--blockchain <chain>` - Blockchain name (required if token exists on multiple chains)
+- `--interactive` - Force keyboard prompt flow in TTY terminals
 
 Output includes the deposit address, chain information, and minimum deposit amount.
 
@@ -170,6 +200,7 @@ Execute a cross-chain token swap.
 near-intents-cli swap --from <symbol> --to <symbol> --amount <amount>
 near-intents-cli swap --from USDC --to NEAR --amount 100
 near-intents-cli swap --from ETH --to SOL --amount 1.5 --from-chain eth --to-chain sol
+near-intents-cli swap --interactive
 ```
 
 Options:
@@ -179,6 +210,7 @@ Options:
 - `--to <symbol>` - Destination token symbol (required)
 - `--to-chain <chain>` - Destination blockchain (optional, inferred if unambiguous)
 - `--amount <num>` - Amount to swap (required)
+- `--interactive` - Force keyboard prompt flow in TTY terminals
 - `--dry-run` - Show quote without executing the swap
 
 ### transfer
@@ -188,6 +220,7 @@ Transfer tokens to another near-intents account. Internal transfers are instant 
 ```bash
 near-intents-cli transfer --to <address> --amount <amount> --token <symbol>
 near-intents-cli transfer --to 0x1234567890abcdef --amount 50 --token USDC
+near-intents-cli transfer --interactive
 ```
 
 Options:
@@ -196,6 +229,7 @@ Options:
 - `--amount <num>` - Amount to transfer (required)
 - `--token <symbol>` - Token symbol (required)
 - `--blockchain <chain>` - Blockchain (if token exists on multiple chains)
+- `--interactive` - Force keyboard prompt flow in TTY terminals
 - `--dry-run` - Show quote without executing the transfer
 
 ### withdraw
@@ -205,6 +239,7 @@ Withdraw tokens from your NEAR Intents wallet to an external address.
 ```bash
 near-intents-cli withdraw --to <address> --amount <amount> --token <symbol>
 near-intents-cli withdraw --to 0x1234567890abcdef --amount 50 --token USDC --blockchain eth
+near-intents-cli withdraw --interactive
 ```
 
 Options:
@@ -213,6 +248,7 @@ Options:
 - `--amount <num>` - Amount to withdraw (required)
 - `--token <symbol>` - Token symbol (required)
 - `--blockchain <chain>` - Blockchain (required if token exists on multiple chains)
+- `--interactive` - Force keyboard prompt flow in TTY terminals
 - `--dry-run` - Show quote without executing the withdrawal
 
 ### config
@@ -229,8 +265,11 @@ near-intents-cli config set api-key YOUR_API_KEY
 # Set private key
 near-intents-cli config set private-key ed25519:YOUR_PRIVATE_KEY
 
-# Generate a new NEAR key pair
-near-intents-cli config generate-key
+# Set default startup mode
+near-intents-cli config set preferred-mode human
+
+# Generate a new wallet
+near-intents-cli config generate-wallet
 
 # Clear all configuration
 near-intents-cli config clear
@@ -432,7 +471,8 @@ The CLI stores configuration in `~/.near-intents/config.json`:
 ```json
 {
   "apiKey": "your-api-key",
-  "privateKey": "ed25519:your-private-key"
+  "privateKey": "ed25519:your-private-key",
+  "preferredMode": "human"
 }
 ```
 

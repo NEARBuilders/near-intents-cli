@@ -4,7 +4,7 @@
 // Re-export useful types from dependencies
 export { AuthMethod } from "@defuse-protocol/internal-utils";
 export type { QuoteResponse } from "@defuse-protocol/one-click-sdk-typescript";
-export type { Config, StoredConfig } from "./config";
+export type { Config, PreferredMode, StoredConfig } from "./config";
 // ============================================================================
 // Configuration
 // ============================================================================
@@ -12,9 +12,11 @@ export {
 	clearStoredConfig,
 	getApiKey,
 	getConfigPath,
+	getPreferredMode,
 	hasApiKey,
 	loadConfig,
 	readStoredConfig,
+	setPreferredMode,
 	tryLoadConfig,
 	writeStoredConfig,
 } from "./config";

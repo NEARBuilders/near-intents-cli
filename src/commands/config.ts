@@ -20,17 +20,18 @@ export async function configCommand(flags: Record<string, string>) {
 			return configGet();
 		case "clear":
 			return configClear();
-		case "generate-key":
+		case "generate-wallet":
 			return configGenerateKey();
 		default:
 			console.log(`Usage: near-intents-cli config <command>
 
 Commands:
-  set api-key <key>      Save API key to config file
-  set private-key <key>  Save private key to config file
-  generate-key           Generate new NEAR key pair
-  get                    Show current config
-  clear                  Remove config file
+  set api-key <key>            Save API key to config file
+  set private-key <key>        Save private key to config file
+  set preferred-mode <mode>    Save startup mode (human|agent)
+  generate-wallet              Generate new NEAR wallet
+  get                          Show current config
+  clear                        Remove config file
 
 Config file: ${getConfigPath()}`);
 	}
@@ -39,7 +40,7 @@ Config file: ${getConfigPath()}`);
 function configSet(key: string | undefined, value: string | undefined) {
 	if (!key) {
 		console.error(
-			"Error: Missing key. Usage: config set <api-key|private-key> <value>",
+			"Error: Missing key. Usage: config set <api-key|private-key|preferred-mode> <value>",
 		);
 		process.exit(1);
 	}
@@ -61,9 +62,19 @@ function configSet(key: string | undefined, value: string | undefined) {
 			writeStoredConfig(config);
 			console.log(`Private key saved to ${getConfigPath()}`);
 			break;
+		case "preferred-mode":
+			if (value !== "human" && value !== "agent") {
+				console.error(`Invalid preferred mode: ${value}`);
+				console.error("Valid values: human, agent");
+				process.exit(1);
+			}
+			config.preferredMode = value;
+			writeStoredConfig(config);
+			console.log(`Preferred mode saved to ${getConfigPath()}`);
+			break;
 		default:
 			console.error(`Unknown config key: ${key}`);
-			console.error("Valid keys: api-key, private-key");
+			console.error("Valid keys: api-key, private-key, preferred-mode");
 			process.exit(1);
 	}
 }
@@ -72,11 +83,12 @@ function configGet() {
 	const config = readStoredConfig();
 	const configPath = getConfigPath();
 
-	if (!config.apiKey && !config.privateKey) {
+	if (!config.apiKey && !config.privateKey && !config.preferredMode) {
 		console.log(`No config found at ${configPath}`);
 		console.log("\nTo get started:");
-		console.log("  near-intents-cli config generate-key");
+		console.log("  near-intents-cli config generate-wallet");
 		console.log("  near-intents-cli config set api-key <key>");
+		console.log("  near-intents-cli config set preferred-mode <human|agent>");
 		return;
 	}
 
@@ -98,6 +110,8 @@ function configGet() {
 	} else {
 		console.log("Private key: (not set)");
 	}
+
+	console.log(`Preferred mode: ${config.preferredMode ?? "(not set)"}`);
 }
 
 function configClear() {
@@ -123,6 +137,6 @@ function configGenerateKey() {
 
 	console.log(`New key pair generated and saved to ${getConfigPath()}\n`);
 	console.log(`Wallet address: ${address}`);
-	console.log(`\nTo fund this wallet, deposit tokens using:`);
-	console.log(`  near-intents-cli deposit --token USDC --blockchain eth`);
+	console.log("\nTo fund this wallet, deposit tokens using:");
+	console.log("  near-intents-cli deposit --token USDC --blockchain eth");
 }

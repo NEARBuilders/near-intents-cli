@@ -10,9 +10,12 @@ export interface Config {
 	walletAddress: string;
 }
 
+export type PreferredMode = "human" | "agent";
+
 export interface StoredConfig {
 	apiKey?: string;
 	privateKey?: string;
+	preferredMode?: PreferredMode;
 }
 
 function getConfigDir(): string {
@@ -87,6 +90,17 @@ export function hasApiKey(): boolean {
 	return !!getApiKey();
 }
 
+export function getPreferredMode(): PreferredMode | undefined {
+	const stored = readStoredConfig();
+	return stored.preferredMode;
+}
+
+export function setPreferredMode(mode: PreferredMode): void {
+	const stored = readStoredConfig();
+	stored.preferredMode = mode;
+	writeStoredConfig(stored);
+}
+
 /**
  * Load config with private key.
  * Priority for private key: config file > env var
@@ -98,7 +112,7 @@ export function loadConfig(): Config {
 	if (!privateKey) {
 		throw new Error(
 			"Private key required. Provide via:\n" +
-				"  near-intents-cli config generate-key\n" +
+				"  near-intents-cli config generate-wallet\n" +
 				"  near-intents-cli config set private-key <key>\n" +
 				"  NEAR_PRIVATE_KEY environment variable",
 		);

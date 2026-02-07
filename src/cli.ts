@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { pathToFileURL } from "node:url";
 import { balancesCommand } from "./commands/balances";
 import { configCommand } from "./commands/config";
 import { depositCommand } from "./commands/deposit";
@@ -6,97 +7,23 @@ import { swapCommand } from "./commands/swap";
 import { tokensCommand } from "./commands/tokens";
 import { transferCommand } from "./commands/transfer";
 import { withdrawCommand } from "./commands/withdraw";
-import { loadConfig } from "./config";
+import { resolveCliMode } from "./cli-mode";
+import { getPreferredMode, loadConfig, setPreferredMode } from "./config";
+import { runHumanSession } from "./human/session";
+import { buildCliHelp } from "./utils/terminal-ui";
 import { version } from "../package.json";
 
-// ANSI color codes for terminal styling
-const COLORS = {
-	reset: "\x1b[0m",
-	bright: "\x1b[1m",
-	cyan: "\x1b[36m",
-	magenta: "\x1b[35m",
-	blue: "\x1b[34m",
-	green: "\x1b[32m",
-	yellow: "\x1b[33m",
-	white: "\x1b[37m",
-};
+const HELP = buildCliHelp(version);
+const BOOLEAN_FLAGS = new Set([
+	"help",
+	"version",
+	"human",
+	"agent",
+	"interactive",
+	"dry-run",
+]);
 
-const HELP = `
-${COLORS.bright}${COLORS.cyan}Near Intents CLI${COLORS.reset} v${version}
-Cross-chain token swaps via intent-based execution.
-
-${COLORS.yellow}API KEY:${COLORS.reset}
-  Get free key: ${COLORS.green}https://partners.near-intents.org/${COLORS.reset}
-  Without key: 0.1% swap fee
-  Set: near-intents-cli config set api-key <key>
-
-${COLORS.bright}${COLORS.cyan}COMMANDS:${COLORS.reset}
-  ${COLORS.green}tokens${COLORS.reset}      List/search supported tokens
-  ${COLORS.green}balances${COLORS.reset}   Show wallet balances
-  ${COLORS.green}deposit${COLORS.reset}    Get deposit address
-  ${COLORS.green}swap${COLORS.reset}       Execute token swap
-  ${COLORS.green}transfer${COLORS.reset}   Transfer to another near-intents account
-  ${COLORS.green}withdraw${COLORS.reset}   Withdraw to external address
-  ${COLORS.green}config${COLORS.reset}     Manage settings (api-key, private-key)
-
-${COLORS.bright}${COLORS.cyan}OPTIONS:${COLORS.reset}
-  ${COLORS.green}--help, -h${COLORS.reset}          Show help
-  ${COLORS.green}--version, -v${COLORS.reset}       Show version
-
-${COLORS.bright}${COLORS.cyan}COMMAND OPTIONS:${COLORS.reset}
-  ${COLORS.green}tokens:${COLORS.reset}
-    --search <query>            Filter tokens by search query
-
-  ${COLORS.green}deposit:${COLORS.reset}
-    --token <symbol>            Token symbol (required)
-    --blockchain <chain>        Blockchain (required if token exists on multiple chains)
-
-  ${COLORS.green}swap:${COLORS.reset}
-    --from <symbol>             Source token symbol (required)
-    --from-chain <chain>        Source blockchain
-    --to <symbol>               Destination token symbol (required)
-    --to-chain <chain>          Destination blockchain
-    --amount <num>              Amount to swap (required)
-    --dry-run                   Show quote without executing
-
-  ${COLORS.green}transfer:${COLORS.reset}
-    --to <address>              Destination near-intents address (required)
-    --amount <num>              Amount to transfer (required)
-    --token <symbol>            Token symbol (required)
-    --blockchain <chain>        Blockchain (if token on multiple chains)
-    --dry-run                   Show quote without executing
-
-  ${COLORS.green}withdraw:${COLORS.reset}
-    --to <address>              Destination address (required)
-    --amount <num>              Amount to withdraw (required)
-    --token <symbol>            Token symbol (required)
-    --blockchain <chain>        Blockchain (required if token exists on multiple chains)
-    --dry-run                   Show quote without executing
-
-  ${COLORS.green}config:${COLORS.reset}
-    set api-key <key>           Save API key
-    set private-key <key>       Save private key
-    generate-key                Generate new NEAR key pair
-    get                         Show current config
-    clear                       Remove config file
-
-${COLORS.bright}${COLORS.cyan}EXAMPLES:${COLORS.reset}
-  near-intents-cli config generate-key
-  near-intents-cli config set api-key YOUR_KEY
-  near-intents-cli tokens --search USDC
-  near-intents-cli balances
-  near-intents-cli deposit --token USDC --blockchain eth
-  near-intents-cli swap --from USDC --to NEAR --amount 100
-  near-intents-cli swap --from USDC --to NEAR --amount 100 --dry-run
-  near-intents-cli transfer --to 0x... --amount 50 --token USDC
-  near-intents-cli withdraw --to 0x123... --amount 50 --token USDC --blockchain eth
-
-${COLORS.bright}${COLORS.cyan}EXIT CODES:${COLORS.reset}
-  0  Success
-  1  Error (invalid args, API error, etc.)
-`;
-
-function parseArgs(args: string[]): {
+export function parseArgs(args: string[]): {
 	command: string;
 	flags: Record<string, string>;
 	positional: string[];
@@ -110,14 +37,13 @@ function parseArgs(args: string[]): {
 		if (arg.startsWith("--")) {
 			const key = arg.slice(2);
 			const value = args[i + 1];
-			if (value && !value.startsWith("-")) {
+			if (!BOOLEAN_FLAGS.has(key) && value && !value.startsWith("-")) {
 				flags[key] = value;
 				i++;
 			} else {
 				flags[key] = "true";
 			}
 		} else if (arg.startsWith("-")) {
-			// Short flags like -h, -v
 			const key = arg.slice(1);
 			flags[key] = "true";
 		} else if (!command) {
@@ -130,84 +56,124 @@ function parseArgs(args: string[]): {
 	return { command, flags, positional };
 }
 
-async function main() {
-	const args = process.argv.slice(2);
+export async function runOneShotCommand(
+	command: string,
+	flags: Record<string, string>,
+	positional: string[],
+): Promise<void> {
+	switch (command) {
+		case "tokens":
+			await tokensCommand(flags);
+			break;
+
+		case "balances": {
+			const config = loadConfig();
+			await balancesCommand(config);
+			break;
+		}
+
+		case "deposit": {
+			const config = loadConfig();
+			await depositCommand(config, flags);
+			break;
+		}
+
+		case "swap": {
+			const config = loadConfig();
+			await swapCommand(config, flags);
+			break;
+		}
+
+		case "transfer": {
+			const config = loadConfig();
+			await transferCommand(config, flags);
+			break;
+		}
+
+		case "withdraw": {
+			const config = loadConfig();
+			await withdrawCommand(config, flags);
+			break;
+		}
+
+		case "config": {
+			flags._subcommand = positional[0];
+			flags._key = positional[1];
+			flags._value = positional[2];
+			await configCommand(flags);
+			break;
+		}
+
+		default:
+			throw new Error(`Unknown command: ${command}`);
+	}
+}
+
+function getExplicitMode(flags: Record<string, string>): "human" | "agent" | undefined {
+	if (flags.human === "true") {
+		return "human";
+	}
+	if (flags.agent === "true") {
+		return "agent";
+	}
+	return undefined;
+}
+
+export async function runCli(args: string[]): Promise<void> {
 	const { command, flags, positional } = parseArgs(args);
 
-	// Handle --version / -v
 	if (flags.version === "true" || flags.v === "true") {
 		console.log(`near-intents-cli v${version}`);
 		return;
 	}
 
-	// Handle --help / -h or no command
-	if (
-		!command ||
-		command === "help" ||
-		flags.help === "true" ||
-		flags.h === "true"
-	) {
+	const mode = resolveCliMode(flags, getPreferredMode());
+	const explicitMode = getExplicitMode(flags);
+	if (explicitMode) {
+		setPreferredMode(explicitMode);
+	}
+
+	if (flags.human === "true") {
+		if (command) {
+			throw new Error("--human mode does not accept direct command arguments");
+		}
+		await runHumanSession();
+		return;
+	}
+
+	if (command === "help" || flags.help === "true" || flags.h === "true") {
 		console.log(HELP);
 		return;
 	}
 
-	try {
-		switch (command) {
-			case "tokens":
-				await tokensCommand(flags);
-				break;
-
-			case "balances": {
-				const config = loadConfig();
-				await balancesCommand(config);
-				break;
-			}
-
-			case "deposit": {
-				const config = loadConfig();
-				await depositCommand(config, flags);
-				break;
-			}
-
-			case "swap": {
-				const config = loadConfig();
-				await swapCommand(config, flags);
-				break;
-			}
-
-			case "transfer": {
-				const config = loadConfig();
-				await transferCommand(config, flags);
-				break;
-			}
-
-			case "withdraw": {
-				const config = loadConfig();
-				await withdrawCommand(config, flags);
-				break;
-			}
-
-			case "config": {
-				// Parse config subcommand: config set api-key <value>
-				// positional[0] = subcommand (set/get/clear)
-				// positional[1] = key (api-key/private-key)
-				// positional[2] = value
-				flags._subcommand = positional[0];
-				flags._key = positional[1];
-				flags._value = positional[2];
-				await configCommand(flags);
-				break;
-			}
-
-			default:
-				console.error(`Unknown command: ${command}`);
-				console.log(HELP);
-				process.exit(1);
+	if (!command) {
+		if (mode === "human") {
+			await runHumanSession();
+			return;
 		}
-	} catch (error) {
-		console.error(`Error: ${error instanceof Error ? error.message : error}`);
-		process.exit(1);
+		console.log(HELP);
+		return;
 	}
+
+	await runOneShotCommand(command, flags, positional);
 }
 
-main();
+function isMainModule(): boolean {
+	if (!process.argv[1]) {
+		return false;
+	}
+	return import.meta.url === pathToFileURL(process.argv[1]).href;
+}
+
+if (isMainModule()) {
+	runCli(process.argv.slice(2)).catch((error) => {
+		if (error instanceof Error && error.message.startsWith("Unknown command:")) {
+			console.error(error.message);
+			console.log(HELP);
+			process.exit(1);
+		}
+
+		console.error(`Error: ${error instanceof Error ? error.message : error}`);
+		process.exit(1);
+	});
+}

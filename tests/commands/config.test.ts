@@ -1,7 +1,21 @@
+import * as fs from "node:fs";
+import * as os from "node:os";
+import * as path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { configCommand } from "@/commands/config";
 import { readStoredConfig } from "@/config";
-import { cleanupConfigDir } from "../setup";
+
+const TEST_CONFIG_DIR = path.join(
+	os.tmpdir(),
+	`near-intents-config-command-test-${process.pid}`,
+);
+
+function cleanupConfigDir(): void {
+	const configFile = path.join(TEST_CONFIG_DIR, "config.json");
+	if (fs.existsSync(configFile)) {
+		fs.unlinkSync(configFile);
+	}
+}
 
 describe("config command", () => {
 	let consoleSpy: ReturnType<typeof vi.spyOn>;
@@ -9,6 +23,10 @@ describe("config command", () => {
 	let exitSpy: ReturnType<typeof vi.spyOn>;
 
 	beforeEach(() => {
+		process.env.NEAR_INTENTS_CONFIG_DIR = TEST_CONFIG_DIR;
+		if (!fs.existsSync(TEST_CONFIG_DIR)) {
+			fs.mkdirSync(TEST_CONFIG_DIR, { recursive: true });
+		}
 		cleanupConfigDir();
 		consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 		consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
@@ -24,9 +42,9 @@ describe("config command", () => {
 		cleanupConfigDir();
 	});
 
-	describe("generate-key", () => {
+	describe("generate-wallet", () => {
 		it("should generate a new key pair", async () => {
-			await configCommand({ _subcommand: "generate-key" });
+			await configCommand({ _subcommand: "generate-wallet" });
 
 			const config = readStoredConfig();
 			expect(config.privateKey).toBeDefined();
@@ -36,15 +54,19 @@ describe("config command", () => {
 			expect(output).toContain("Wallet address:");
 		});
 
+		it("keeps generate-wallet as backward-compatible alias", async () => {
+			await configCommand({ _subcommand: "generate-wallet" });
+			const config = readStoredConfig();
+			expect(config.privateKey).toMatch(/^ed25519:/);
+		});
+
 		it("should error if key already exists", async () => {
-			// First generate (cleanupConfigDir runs in beforeEach, so we need to generate fresh)
-			await configCommand({ _subcommand: "generate-key" });
+			await configCommand({ _subcommand: "generate-wallet" });
 			consoleSpy.mockClear();
 			consoleErrorSpy.mockClear();
 
-			// Second generate should fail
 			await expect(
-				configCommand({ _subcommand: "generate-key" }),
+				configCommand({ _subcommand: "generate-wallet" }),
 			).rejects.toThrow("process.exit called");
 
 			const errorOutput = consoleErrorSpy.mock.calls
@@ -79,6 +101,17 @@ describe("config command", () => {
 			expect(config.privateKey).toBe(testKey);
 		});
 
+		it("should set preferred-mode", async () => {
+			await configCommand({
+				_subcommand: "set",
+				_key: "preferred-mode",
+				_value: "human",
+			});
+
+			const config = readStoredConfig();
+			expect(config.preferredMode).toBe("human");
+		});
+
 		it("should error on missing key", async () => {
 			await expect(
 				configCommand({ _subcommand: "set", _key: "", _value: "val" }),
@@ -104,6 +137,16 @@ describe("config command", () => {
 				}),
 			).rejects.toThrow("process.exit called");
 		});
+
+		it("should error on invalid preferred-mode value", async () => {
+			await expect(
+				configCommand({
+					_subcommand: "set",
+					_key: "preferred-mode",
+					_value: "invalid-mode",
+				}),
+			).rejects.toThrow("process.exit called");
+		});
 	});
 
 	describe("get", () => {
@@ -115,7 +158,6 @@ describe("config command", () => {
 		});
 
 		it("should show config when set", async () => {
-			// Set up some config
 			await configCommand({
 				_subcommand: "set",
 				_key: "api-key",
@@ -127,25 +169,44 @@ describe("config command", () => {
 
 			const output = consoleSpy.mock.calls.map((c) => c[0]).join("\n");
 			expect(output).toContain("API key:");
-			expect(output).toContain("test-api"); // masked
+			expect(output).toContain("test-api");
+			expect(output).toContain("Preferred mode: (not set)");
+		});
+
+		it("should show preferred mode when set", async () => {
+			await configCommand({
+				_subcommand: "set",
+				_key: "preferred-mode",
+				_value: "agent",
+			});
+			consoleSpy.mockClear();
+
+			await configCommand({ _subcommand: "get" });
+
+			const output = consoleSpy.mock.calls.map((c) => c[0]).join("\n");
+			expect(output).toContain("Preferred mode: agent");
 		});
 	});
 
 	describe("clear", () => {
 		it("should clear config", async () => {
-			// Set up some config
 			await configCommand({
 				_subcommand: "set",
 				_key: "api-key",
 				_value: "test-key",
 			});
+			await configCommand({
+				_subcommand: "set",
+				_key: "preferred-mode",
+				_value: "human",
+			});
 
-			// Clear it
 			await configCommand({ _subcommand: "clear" });
 
 			const config = readStoredConfig();
 			expect(config.apiKey).toBeUndefined();
 			expect(config.privateKey).toBeUndefined();
+			expect(config.preferredMode).toBeUndefined();
 		});
 	});
 
@@ -155,7 +216,8 @@ describe("config command", () => {
 
 			const output = consoleSpy.mock.calls.map((c) => c[0]).join("\n");
 			expect(output).toContain("Usage:");
-			expect(output).toContain("generate-key");
+			expect(output).toContain("generate-wallet");
+			expect(output).toContain("preferred-mode");
 		});
 	});
 });
